@@ -22,7 +22,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ordo.waiter"
+    },
+    "android": {
+      "package": "com.ordo.waiter"
     }
   }
 }
