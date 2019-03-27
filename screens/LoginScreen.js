@@ -12,16 +12,16 @@ export default class LoginScreen extends React.Component {
     hasCameraPermission: null,
     page: 'login',
     isScanDone: false,
-    isMounted: false,
   }
 
   async componentDidMount() {
+    this.isMounted = true;
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    this.setState({ hasCameraPermission: status === 'granted', isMounted: true });
+    this.setState({ hasCameraPermission: status === 'granted' });
   }
 
   componentWillUnmount() {
-    this.setState({ isMounted: false });
+    this.isMounted = false;
   }
 
   renderContent = () => {
