@@ -2,13 +2,17 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import reducers from './reducers'
 
+const store = createStore(reducers);
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
 
-  render() {
+  renderContent = () => {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -25,6 +29,14 @@ export default class App extends React.Component {
         </View>
       );
     }
+  }
+
+  render() {
+    return (
+      <Provider store={store}>
+        {this.renderContent()}
+      </Provider>
+    );
   }
 
   _loadResourcesAsync = async () => {

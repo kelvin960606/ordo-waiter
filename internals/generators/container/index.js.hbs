@@ -1,7 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { ScrollView, StyleSheet, Text } from 'react-native';
 
-export default class {{ properCase name }} extends React.Component {
+{{#if wantActionsAndReducer}}
+import {  } from '../redux/{{properCase name}}Redux';
+{{/if}}
+
+class {{ properCase name }} extends React.Component {
   render() {
     return (
       <ScrollView style={styles.container}>
@@ -18,6 +23,19 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+const mapStateToProps = state => ({
+
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)({{ properCase name }})
 
 
 

@@ -1,9 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux'
 import { StyleSheet, Button, AsyncStorage, SafeAreaView, Image, TouchableWithoutFeedback, Text, View } from 'react-native';
 import { BarCodeScanner, Permissions, Icon } from 'expo';
 import Layout from '../constants/Layout';
+import { loginRequest } from '../redux/loginRedux';
 
-export default class LoginScreen extends React.Component {
+
+class LoginScreen extends React.Component {
   static navigationOptions = {
     title: 'Please sign in',
   };
@@ -137,5 +140,16 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = state => ({
 
+});
+
+const mapDispatchToProps = dispatch => ({
+  dispatch,
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginScreen)
 
