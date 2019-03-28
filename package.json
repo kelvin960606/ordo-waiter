@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "apisauce": "^1.0.2",
     "expo": "^32.0.0",
     "expokit": "32.0.7",
     "immutable": "^4.0.0-rc.12",
