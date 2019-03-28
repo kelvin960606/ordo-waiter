@@ -53,6 +53,7 @@ yarn-error.log
 #
 .expo/settings.json
 .expo/packager-info.json
+.expo-source
 
 # BUCK
 buck-out/
@@ -69,3 +70,4 @@ buck-out/
 */fastlane/report.xml
 */fastlane/Preview.html
 */fastlane/screenshots
+.expo/packager-info.json
