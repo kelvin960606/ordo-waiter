@@ -10,9 +10,9 @@
     ],
     "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/images/ordo-waiter-vbg.png",
+    "icon": "./app/assets/images/ordo-waiter-vbg.png",
     "splash": {
-      "image": "./assets/images/on-boarding.png",
+      "image": "./app/assets/images/on-boarding.png",
       "resizeMode": "cover"
     },
     "updates": {

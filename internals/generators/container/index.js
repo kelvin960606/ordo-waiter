@@ -29,21 +29,17 @@ module.exports = {
         message: 'Do you want sagas for asynchronous flows? (e.g. fetching data)',
     }],
     actions: (data) => {
-        // Generate index.js and index.test.js
-        var componentTemplate = './container/index.js.hbs'; // eslint-disable-line no-var
-        let folder = 'screens';
-
         const actions = [{
             type: 'add',
-            path: `../../${folder}/{{properCase name}}.js`,
-            templateFile: componentTemplate,
+            path: `../../app/screens/{{properCase name}}.js`,
+            templateFile: './container/index.js.hbs',
             abortOnFail: true,
         }];
 
         if (data.wantActionsAndReducer) {
             actions.push({
                 type: 'add',
-                path: `../../redux/{{properCase name}}Redux.js`,
+                path: `../../app/redux/{{properCase name}}Redux.js`,
                 templateFile: './container/redux.js.hbs',
                 abortOnFail: true,
             });
@@ -52,7 +48,7 @@ module.exports = {
         if (data.wantSaga) {
             actions.push({
                 type: 'add',
-                path: `../../saga/{{properCase name}}Saga.js`,
+                path: `../../app/saga/{{properCase name}}Saga.js`,
                 templateFile: './container/saga.js.hbs',
                 abortOnFail: true,
             });
