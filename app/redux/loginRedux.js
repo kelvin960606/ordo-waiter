@@ -12,6 +12,7 @@ export const LOGIN_FAILED = 'LOGIN_FAILED'
  */
 
 export function loginRequest(params) {
+    alert(params);
     return {
         type: LOGIN_REQUEST,
         payload: params,
@@ -45,6 +46,7 @@ const initialState = fromJS({
 function loginScreenReducer(state = initialState, action) {
     switch (action.type) {
         case LOGIN_REQUEST:
+        alert('triggered reducer');
             return state
                 .set('loading', true);
         case LOGIN_SUCCESS:

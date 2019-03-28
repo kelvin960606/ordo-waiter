@@ -21,6 +21,7 @@ class LoginScreen extends React.Component {
     this.isMounted = true;
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     this.setState({ hasCameraPermission: status === 'granted' });
+    this.props.dispatch(loginRequest('Hello'));
   }
 
   componentWillUnmount() {

@@ -1,0 +1,11 @@
+import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { DEFAULT_ACTION } from '../redux/{{camelCase name}}Redux';
+
+function* doSomething(action) {
+
+}
+
+
+function* {{camelCase name}}Saga() {
+  yield takeLatest(DEFAULT_ACTION, doSomething);
+}

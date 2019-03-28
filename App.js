@@ -4,10 +4,9 @@ import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './app/navigation/AppNavigator';
+import configureStore from './store';
 
-import reducers from './app/redux/index'
-
-const store = createStore(reducers);
+const store = configureStore();
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
