@@ -1,0 +1,187 @@
+{
+    "name": "ordoWaiter",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "start": "node node_modules/react-native/local-cli/cli.js start",
+        "test": "jest",
+        "generate": "plop --plopfile internals/generators/index.js",
+        "lint": "eslint .",
+        "ios": "react-native run-ios",
+        "android": "react-native run-android"
+    },
+    "dependencies": {
+        "apisauce": "^1.0.2",
+        "immutable": "^4.0.0-rc.12",
+        "plop": "^2.3.0",
+        "react": "16.8.3",
+        "react-native": "0.59.2",
+        "react-redux": "^5.0.6",
+        "redux": "^3.7.2",
+        "redux-devtools-extension": "^2.13.5",
+        "redux-immutable": "^4.0.0",
+        "redux-saga": "^0.16.0",
+        "reselect": "^3.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.4.0",
+        "@babel/runtime": "^7.4.2",
+        "babel": "^6.23.0",
+        "babel-cli": "^6.26.0",
+        "babel-eslint": "^8.0.3",
+        "babel-jest": "^24.5.0",
+        "babel-plugin-module-resolver": "^3.0.0",
+        "babel-preset-react-native": "^5.0.2",
+        "@react-native-community/eslint-config": "^0.0.3",
+        "eslint": "^5.15.3",
+        "eslint-config-airbnb": "^16.1.0",
+        "eslint-config-airbnb-base": "^12.1.0",
+        "eslint-import-resolver-babel-module": "^4.0.0",
+        "eslint-plugin-import": "^2.8.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-react": "^7.5.1",
+        "eslint-plugin-redux-saga": "^0.6.0",
+        "hoist-non-react-statics": "^2.3.1",
+        "invariant": "^2.2.2",
+        "jest": "^24.5.0",
+        "lodash": "^4.17.4",
+        "metro-react-native-babel-preset": "^0.53.1",
+        "react-test-renderer": "16.8.3",
+        "redux-devtools-extension": "^2.13.5",
+        "remote-redux-devtools": "^0.5.12"
+    },
+    "jest": {
+        "preset": "react-native"
+    },
+    "eslintConfig": {
+        "parser": "babel-eslint",
+        "extends": [
+            "airbnb"
+        ],
+        "env": {
+            "node": true,
+            "jest": true,
+            "es6": true
+        },
+        "plugins": [
+            "redux-saga",
+            "react",
+            "jsx-a11y"
+        ],
+        "parserOptions": {
+            "ecmaVersion": 6,
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true,
+                "module": true
+            }
+        },
+        "settings": {
+            "import/resolver": {
+                "babel-module": {}
+            }
+        },
+        "rules": {
+            "react/no-array-index-key": [
+                "off"
+            ],
+            "object-curly-newline": [
+                "off",
+                {
+                    "multiline": true,
+                    "minProperties": 4
+                }
+            ],
+            "arrow-parens": [
+                "error",
+                "always"
+            ],
+            "arrow-body-style": [
+                2,
+                "as-needed"
+            ],
+            "class-methods-use-this": 0,
+            "comma-dangle": [
+                2,
+                "always-multiline"
+            ],
+            "import/imports-first": 0,
+            "import/newline-after-import": 0,
+            "import/no-dynamic-require": 0,
+            "import/no-extraneous-dependencies": 0,
+            "import/no-named-as-default": 0,
+            "import/no-unresolved": 2,
+            "import/no-webpack-loader-syntax": 0,
+            "import/prefer-default-export": 0,
+            "import/extensions": 0,
+            "indent": [
+                2,
+                4,
+                {
+                    "SwitchCase": 1
+                }
+            ],
+            "jsx-a11y/aria-props": 2,
+            "jsx-a11y/heading-has-content": 0,
+            "jsx-a11y/label-has-for": 2,
+            "jsx-a11y/mouse-events-have-key-events": 2,
+            "jsx-a11y/role-has-required-aria-props": 2,
+            "jsx-a11y/role-supports-aria-props": 2,
+            "max-len": 0,
+            "newline-per-chained-call": 0,
+            "no-confusing-arrow": 0,
+            "no-console": 0,
+            "no-use-before-define": 0,
+            "no-underscore-dangle": [
+                "off"
+            ],
+            "prefer-template": 2,
+            "react/forbid-prop-types": 0,
+            "react/prop-types": [
+                "off",
+                {
+                    "ignore": []
+                }
+            ],
+            "react/jsx-first-prop-new-line": [
+                2,
+                "multiline"
+            ],
+            "react/jsx-indent": [
+                1,
+                4
+            ],
+            "react/jsx-indent-props": [
+                1,
+                4
+            ],
+            "react/jsx-filename-extension": 0,
+            "react/jsx-no-target-blank": 0,
+            "react/require-default-props": 0,
+            "react/require-extension": 0,
+            "react/self-closing-comp": 0,
+            "react/jsx-boolean-value": [
+                "error",
+                "always"
+            ],
+            "redux-saga/no-yield-in-race": 2,
+            "redux-saga/yield-effects": 2,
+            "require-yield": 0,
+            "quote-props": 0,
+            "no-useless-escape": 0,
+            "global-require": 0,
+            "camelcase": 0,
+            "no-plusplus": 0,
+            "no-alert": 0
+        },
+        "globals": {
+            "ENVIRONMENT": false,
+            "__DEV__": false,
+            "FormData": false,
+            "fetch": false,
+            "reject": false,
+            "require": false,
+            "alert": false
+        }
+    }
+}
