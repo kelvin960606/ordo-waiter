@@ -1,18 +1,14 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { Provider } from 'react-redux'
-import { createStore } from 'redux'
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import AppNavigator from './app/navigation/AppNavigator';
-import configureStore from './store';
+import AppNavigator from './navigation/AppNavigator';
 
-const store = configureStore();
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
 
-  renderContent = () => {
+  render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -31,28 +27,18 @@ export default class App extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <Provider store={store}>
-        {this.renderContent()}
-      </Provider>
-    );
-  }
-
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('./app/assets/images/ordo-waiter-vbg.png'),
-        require('./app/assets/images/ordo-waiter-xbg.png'),
-        require('./app/assets/images/login.png'),
-        require('./app/assets/images/on-boarding.png'),
+        require('./assets/images/robot-dev.png'),
+        require('./assets/images/robot-prod.png'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
-        'space-mono': require('./app/assets/fonts/SpaceMono-Regular.ttf'),
+        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
   };
