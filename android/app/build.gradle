@@ -107,6 +107,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     splits {
         abi {
@@ -138,10 +139,13 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-firebase')
-    implementation 'com.google.firebase:firebase-core:16.0.1'
-    implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation project(':react-native-firebase')
+    implementation project(':react-native-gesture-handler')
+    implementation "com.google.firebase:firebase-firestore:17.1.5"
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation "com.google.firebase:firebase-core:16.0.6"
+    implementation "com.google.firebase:firebase-auth:16.1.0"
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
 }
