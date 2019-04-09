@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "387556422450",
+    "firebase_url": "https://allder-687d0.firebaseio.com",
+    "project_id": "allder-687d0",
+    "storage_bucket": "allder-687d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387556422450:android:d544b7f9403ac665",
+        "android_client_info": {
+          "package_name": "allder.central.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ4ODEm4kcCRwtPbzbwjhTgeQg8Cbi13g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387556422450-b2vinh77hbriq4eepbbo4br82poqb983.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "387556422450-ltjikhkac3tivvk08bd9iaf4i1ejirj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "allder.central.app"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387556422450:android:e1ad8d305bcc554d",
+        "android_client_info": {
+          "package_name": "com.ordo.waiter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ4ODEm4kcCRwtPbzbwjhTgeQg8Cbi13g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387556422450-b2vinh77hbriq4eepbbo4br82poqb983.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "387556422450-ltjikhkac3tivvk08bd9iaf4i1ejirj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "allder.central.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

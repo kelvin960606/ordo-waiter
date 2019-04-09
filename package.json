@@ -16,6 +16,7 @@
         "plop": "^2.3.0",
         "react": "16.8.3",
         "react-native": "0.59.2",
+        "react-native-firebase": "^5.2.5",
         "react-native-gesture-handler": "^1.1.0",
         "react-navigation": "^3.6.1",
         "react-redux": "^5.0.6",
