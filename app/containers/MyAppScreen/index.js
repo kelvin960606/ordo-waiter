@@ -1,6 +1,6 @@
 /**
  *
- * LoginScreen
+ * MyAppScreen
  *
  */
 
@@ -13,26 +13,26 @@ import { compose } from 'redux';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import makeSelectLoginScreen from './selectors';
+import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 
-export class LoginScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+export class MyAppScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     render() {
         return (
             <View>
-                <Text>Login</Text>
+                <Text>MyApp</Text>
             </View>
         );
     }
 }
 
-LoginScreen.propTypes = {
+MyAppScreen.propTypes = {
     dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
-    loginscreen: makeSelectLoginScreen(),
+    myappscreen: makeSelectMyAppScreen(),
 });
 
 function mapDispatchToProps(dispatch) {
@@ -43,11 +43,11 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-const withReducer = injectReducer({ key: 'loginScreen', reducer });
-const withSaga = injectSaga({ key: 'loginScreen', saga });
+const withReducer = injectReducer({ key: 'myAppScreen', reducer });
+const withSaga = injectSaga({ key: 'myAppScreen', saga });
 
 export default compose(
     withReducer,
     withSaga,
     withConnect,
-)(LoginScreen);
+)(MyAppScreen);
