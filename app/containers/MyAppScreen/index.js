@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -71,6 +71,9 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         return (
             <View>
                 <Text>{JSON.stringify(this.state.tables)}</Text>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+                    <Text>Login</Text>
+                </TouchableOpacity>
             </View>
         );
     }
