@@ -23,6 +23,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
+		17598EBC226975BB0045C6AC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 17598EBB226975BB0045C6AC /* GoogleService-Info.plist */; };
+		17598EBD226975E60045C6AC /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B336D2A2225C3D6C001A7A42 /* libRNFirebase.a */; };
+		17598EBF226975FB0045C6AC /* libFirebaseAuth.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17598EBE226975FB0045C6AC /* libFirebaseAuth.a */; };
+		17598EC1226975FB0045C6AC /* libFirebaseCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 17598EC0226975FB0045C6AC /* libFirebaseCore.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -36,13 +40,11 @@
 		2D16E6881FA4F8E400B85C8A /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D16E6891FA4F8E400B85C8A /* libReact.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* ordoWaiterTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ordoWaiterTests.m */; };
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
+		3BBE7E7D1CE65CC56356722B /* libPods-ordoWaiter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4F2D08CE28C56D0B1EFAA420 /* libPods-ordoWaiter.a */; };
 		49CFB5B108C744E08621E488 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA10C35B455C4F7DAAA3AEE9 /* libRNGestureHandler.a */; };
 		710BA3A756D64160B04BABAB /* libRNGestureHandler-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BECA6FF00E5480E8DCC4131 /* libRNGestureHandler-tvOS.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
-		A53ACE674A6AAA073DCD3067 /* libPods-ordoWaiter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E71482E3DA8576A77DC4C9D /* libPods-ordoWaiter.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
-		B336D2A6225C3E22001A7A42 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B336D2A5225C3E22001A7A42 /* GoogleService-Info.plist */; };
-		CC596C588407421B84770EDD /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C91FA592AEE4FE6BEF01354 /* libRNFirebase.a */; };
 		ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED297162215061F000B7C4FE /* JavaScriptCore.framework */; };
 		ED2971652150620600B7C4FE /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED2971642150620600B7C4FE /* JavaScriptCore.framework */; };
 /* End PBXBuildFile section */
@@ -365,20 +367,24 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = ordoWaiter/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = ordoWaiter/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		1E71482E3DA8576A77DC4C9D /* libPods-ordoWaiter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ordoWaiter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		17598EB7226975270045C6AC /* libFirebaseAuth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseAuth.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		17598EB9226975270045C6AC /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		17598EBB226975BB0045C6AC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Documents/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		17598EBE226975FB0045C6AC /* libFirebaseAuth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseAuth.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		17598EC0226975FB0045C6AC /* libFirebaseCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libFirebaseCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BECA6FF00E5480E8DCC4131 /* libRNGestureHandler-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNGestureHandler-tvOS.a"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* ordoWaiter-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ordoWaiter-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* ordoWaiter-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ordoWaiter-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C91FA592AEE4FE6BEF01354 /* libRNFirebase.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNFirebase.a; sourceTree = "<group>"; };
 		459B12A923E5429E96E7D628 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
+		4F2D08CE28C56D0B1EFAA420 /* libPods-ordoWaiter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ordoWaiter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
-		72ADFF2435F8680CD188830F /* Pods-ordoWaiter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ordoWaiter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ordoWaiter/Pods-ordoWaiter.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
-		87CC0A3AD663DAB4DD21A18C /* Pods-ordoWaiter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ordoWaiter.release.xcconfig"; path = "Pods/Target Support Files/Pods-ordoWaiter/Pods-ordoWaiter.release.xcconfig"; sourceTree = "<group>"; };
+		966A8E098532B6457686F71A /* Pods-ordoWaiter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ordoWaiter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ordoWaiter/Pods-ordoWaiter.debug.xcconfig"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
-		B336D2A5225C3E22001A7A42 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Documents/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B9C0CAD551F3190F9DC8CCEE /* Pods-ordoWaiter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ordoWaiter.release.xcconfig"; path = "Pods/Target Support Files/Pods-ordoWaiter/Pods-ordoWaiter.release.xcconfig"; sourceTree = "<group>"; };
 		BA10C35B455C4F7DAAA3AEE9 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
@@ -397,6 +403,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				17598EBF226975FB0045C6AC /* libFirebaseAuth.a in Frameworks */,
+				17598EC1226975FB0045C6AC /* libFirebaseCore.a in Frameworks */,
+				17598EBD226975E60045C6AC /* libRNFirebase.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
 				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
@@ -411,8 +420,7 @@
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				49CFB5B108C744E08621E488 /* libRNGestureHandler.a in Frameworks */,
-				A53ACE674A6AAA073DCD3067 /* libPods-ordoWaiter.a in Frameworks */,
-				CC596C588407421B84770EDD /* libRNFirebase.a in Frameworks */,
+				3BBE7E7D1CE65CC56356722B /* libPods-ordoWaiter.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -529,9 +537,9 @@
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
+				17598EBB226975BB0045C6AC /* GoogleService-Info.plist */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				B336D2A5225C3E22001A7A42 /* GoogleService-Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
@@ -564,10 +572,14 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				17598EBE226975FB0045C6AC /* libFirebaseAuth.a */,
+				17598EC0226975FB0045C6AC /* libFirebaseCore.a */,
+				17598EB7226975270045C6AC /* libFirebaseAuth.a */,
+				17598EB9226975270045C6AC /* libFirebaseCore.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
-				1E71482E3DA8576A77DC4C9D /* libPods-ordoWaiter.a */,
+				4F2D08CE28C56D0B1EFAA420 /* libPods-ordoWaiter.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -628,8 +640,8 @@
 				00E356EF1AD99517003FC87E /* ordoWaiterTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				BE6755CA544A3C9F1B64EF3F /* Pods */,
 				B336D234225C3439001A7A42 /* Recovered References */,
+				E377462A9417E44C97BA31C8 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -683,11 +695,11 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		BE6755CA544A3C9F1B64EF3F /* Pods */ = {
+		E377462A9417E44C97BA31C8 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				72ADFF2435F8680CD188830F /* Pods-ordoWaiter.debug.xcconfig */,
-				87CC0A3AD663DAB4DD21A18C /* Pods-ordoWaiter.release.xcconfig */,
+				966A8E098532B6457686F71A /* Pods-ordoWaiter.debug.xcconfig */,
+				B9C0CAD551F3190F9DC8CCEE /* Pods-ordoWaiter.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -717,12 +729,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "ordoWaiter" */;
 			buildPhases = (
-				BC8E63A59B88730F7F40AD29 /* [CP] Check Pods Manifest.lock */,
+				765A69D491FB66B15F98713C /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				D2B9391876F62AD74604C50B /* [CP] Copy Pods Resources */,
+				A8AA4423BB29AD564DC0FF4D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -782,9 +794,6 @@
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
-					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 6JQ49HLC2C;
-					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
 						ProvisioningStyle = Automatic;
@@ -801,6 +810,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1172,7 +1182,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				B336D2A6225C3E22001A7A42 /* GoogleService-Info.plist in Resources */,
+				17598EBC226975BB0045C6AC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1222,20 +1232,16 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		BC8E63A59B88730F7F40AD29 /* [CP] Check Pods Manifest.lock */ = {
+		765A69D491FB66B15F98713C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
 				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"$(DERIVED_FILE_DIR)/Pods-ordoWaiter-checkManifestLockResult.txt",
 			);
@@ -1244,20 +1250,16 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D2B9391876F62AD74604C50B /* [CP] Copy Pods Resources */ = {
+		A8AA4423BB29AD564DC0FF4D /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			inputFileListPaths = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ordoWaiter/Pods-ordoWaiter-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/FirebaseFirestore/gRPCCertificates-Firestore.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-			);
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/gRPCCertificates-Firestore.bundle",
 			);
@@ -1394,12 +1396,12 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 72ADFF2435F8680CD188830F /* Pods-ordoWaiter.debug.xcconfig */;
+			baseConfigurationReference = 966A8E098532B6457686F71A /* Pods-ordoWaiter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = 6JQ49HLC2C;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
@@ -1420,11 +1422,11 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87CC0A3AD663DAB4DD21A18C /* Pods-ordoWaiter.release.xcconfig */;
+			baseConfigurationReference = B9C0CAD551F3190F9DC8CCEE /* Pods-ordoWaiter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 6JQ49HLC2C;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
