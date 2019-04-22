@@ -5,12 +5,11 @@
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { HerFlatList } from 'containers/HerFlatList';
 import firebase from 'react-native-firebase';
 
 import injectSaga from 'utils/injectSaga';
@@ -75,7 +74,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
     }
 
     renderTableCard = (item) => {
-        if (!dataChecking(item, 'data', 'status', 'dining')) {
+        if (!dataChecking(item, 'item', 'data', 'status', 'dining')) {
             return (
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Menu', {
@@ -90,8 +89,8 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             borderStyle: 'dashed',
                             borderWidth: 1,
                             borderColor: 'gray',
-                            height: getXdp(46),
-                            width: getXdp(46),
+                            height: getXdp(45),
+                            width: getXdp(45),
                             margin: getXdp(2),
                             padding: getXdp(2),
                         }}
@@ -149,10 +148,10 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                 fontSize: 25,
                                 fontWeight: 'bold',
                                 padding: getXdp(2),
-                                backgroundColor: dataChecking(item, 'data', 'status', 'dining') ? 'red' : 'red',
+                                backgroundColor: dataChecking(item, 'item', 'data', 'status', 'dining') ? 'red' : 'red',
                             }}
                         >
-                            {item.key}
+                            {dataChecking(item, 'item', 'key')}
                         </Text>
                         <Text
                             style={{ fontSize: 7 }}
@@ -162,7 +161,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     </View>
                     <View className="top-left">
                         <Text>logo</Text>
-                        <Text>{item.data.info.pax}pax</Text>
+                        <Text>{dataChecking(item, 'item', 'data', 'info', 'pax')}pax</Text>
                     </View>
                     <View
                         className="bottom-left"
@@ -172,7 +171,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             left: getXdp(2),
                         }}
                     >
-                        <Text>RM {item.data.payment.total}</Text>
+                        <Text>RM {dataChecking(item, 'item', 'data', 'payment', 'total')}</Text>
                     </View>
                     <View
                         className="bottom-right"
@@ -191,29 +190,17 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
 
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <HerFlatList
+            <View style={{ margin: getXdp(1), backgroundColor: '#EEE' }}>
+                <FlatList
                     numColumns={2}
-                    flatListId="table-list"
                     data={this.state.tables}
                     // nextPage={this.props.nextOrderPage}
-                    render={this.renderTableCard}
-                    dispatch={this.props.dispatch}
+                    renderItem={this.renderTableCard}
+                    // onEndReached={() => { alert('on end reach'); }}
+                    // onEndReachedThreshold={0.3}
+                    // onViewableItemsChanged={this.props.onViewChanged}
+                    // keyExtractor={(item, index) => index}
                 />
-                {/* <View
-                    style={{
-                        backgroundColor: 'lightgray',
-                        padding: getXdp(2),
-                    }}
-                >
-                    {
-                        this.state.tables && this.state.tables.map((item, index) => (
-                            <View key={index}>
-                                {this.renderTableCard(item, index)}
-                            </View>
-                        ))
-                    }
-                </View> */}
                 <TouchableOpacity style={{ margin: 30, padding: 15, backgroundColor: 'tomato' }} onPress={() => this.props.navigation.navigate('Login')}>
                     <Text>Login</Text>
                 </TouchableOpacity>
