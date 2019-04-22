@@ -10,12 +10,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { getXdp, dataChecking } from '../../globalUtils';
 import { HerFlatList } from 'containers/HerFlatList';
 import firebase from 'react-native-firebase';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
+import { getXdp, dataChecking } from '../../globalUtils';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
 import { getProductInfo } from './actions';
