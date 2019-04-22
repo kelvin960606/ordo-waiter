@@ -1,16 +1,20 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { apiRequest } from 'app/globalUtils';
-import { defaultAction } from './actions';
-import { DEFAULT_ACTION } from './constants';
+import {
+    getProductInfoSuccess,
+    getProductInfoFailed,
+} from './actions';
+import { GET_PRODUCT_INFO } from './constants';
 
-export function* trigger() {
-    const response = yield call(apiRequest, '', 'get');
+export function* worker() {
+    const response = yield call(apiRequest, '/postgres/product', 'get');
+    console.log(response);
     if (response && response.ok) {
-        yield put(defaultAction(response));
+        yield put(getProductInfoSuccess(response));
     } else {
-        yield put(defaultAction(response));
+        yield put(getProductInfoFailed(response));
     }
 }
 export default function* defaultSaga() {
-    yield takeLatest(DEFAULT_ACTION, trigger);
+    yield takeLatest(GET_PRODUCT_INFO, worker);
 }

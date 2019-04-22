@@ -10,13 +10,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
+import { getXdp, dataChecking } from '../../globalUtils';
+import { HerFlatList } from 'containers/HerFlatList';
 import firebase from 'react-native-firebase';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
+import { getProductInfo } from './actions';
 import saga from './saga';
+import tableData from './table.js';
 
 export class MyAppScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     constructor(props) {
@@ -24,25 +28,27 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
         this.unsubscribe = null;
         this.state = {
-            tables: null,
+            tables: tableData,
         };
+        console.log('tabledata from json:', this.state.tables);
     }
 
     componentDidMount() {
-        try {
-            // should change to normal signIn
-            firebase.auth().signInAnonymously()
-                .then((user) => {
-                    alert(JSON.stringify(user));
-                });
-        } catch (error) {
-            alert(JSON.stringify(error));
-        }
-        this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
+        // try {
+        //     // should change to normal signIn
+        //     firebase.auth().signInAnonymously()
+        //         .then((user) => {
+        //             console.log(JSON.stringify(user));
+        this.props.dispatch(getProductInfo());
+        //         });
+        // } catch (error) {
+        //     alert(JSON.stringify(error));
+        // }
+        // this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
     }
 
     componentWillUnmount() {
-        this.unsubscribe();
+        // this.unsubscribe();
     }
 
     subscribeTables = (documentSnapshot) => {
@@ -61,17 +67,154 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     data: tables[key],
                 });
             });
+            console.log('table', tb);
             this.setState({ tables: tb });
         } else {
             console.log('document not found');
         }
     }
 
+    renderTableCard = (item) => {
+        if (!dataChecking(item, 'data', 'status', 'dining')) {
+            return (
+                <TouchableOpacity
+                    onPress={() => this.props.navigation.navigate('Menu', {
+                        tableData: {
+                            test: 123,
+                            halo: 456,
+                        },
+                    })}
+                >
+                    <View
+                        style={{
+                            borderStyle: 'dashed',
+                            borderWidth: 1,
+                            borderColor: 'gray',
+                            height: getXdp(46),
+                            width: getXdp(46),
+                            margin: getXdp(2),
+                            padding: getXdp(2),
+                        }}
+                    >
+                        <Text
+                            className="empty-text-display"
+                            style={{
+                                color: 'gray',
+                                fontSize: 16,
+                                fontWeight: 'bold',
+                                top: getXdp(19),
+                                textAlign: 'center',
+                            }}
+                        >
+                            EMPTY
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+
+        return (
+            <TouchableOpacity
+                onPress={() => this.props.navigation.navigate('Menu', {
+                    tableData: {
+                        test: 123,
+                        halo: 456,
+                    },
+                })}
+            >
+                <View
+                    style={{
+                        borderStyle: 'dashed',
+                        borderWidth: 1,
+                        borderColor: 'gray',
+                        height: getXdp(46),
+                        width: getXdp(46),
+                        margin: getXdp(2),
+                        padding: getXdp(2),
+                        backgroundColor: 'white',
+                    }}
+                >
+                    <View
+                        style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                        }}
+                    >
+                        <Text
+                            className="table-code"
+                            style={{
+                                color: 'white',
+                                textAlign: 'center',
+                                fontSize: 25,
+                                fontWeight: 'bold',
+                                padding: getXdp(2),
+                                backgroundColor: dataChecking(item, 'data', 'status', 'dining') ? 'red' : 'red',
+                            }}
+                        >
+                            {item.key}
+                        </Text>
+                        <Text
+                            style={{ fontSize: 7 }}
+                        >
+                            Order Created
+                        </Text>
+                    </View>
+                    <View className="top-left">
+                        <Text>logo</Text>
+                        <Text>{item.data.info.pax}pax</Text>
+                    </View>
+                    <View
+                        className="bottom-left"
+                        style={{
+                            position: 'absolute',
+                            bottom: getXdp(2),
+                            left: getXdp(2),
+                        }}
+                    >
+                        <Text>RM {item.data.payment.total}</Text>
+                    </View>
+                    <View
+                        className="bottom-right"
+                        style={{
+                            position: 'absolute',
+                            bottom: getXdp(2),
+                            right: getXdp(2),
+                        }}
+                    >
+                        <Text>xx mins ago</Text>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        );
+    };
+
     render() {
         return (
-            <View>
-                <Text>{JSON.stringify(this.state.tables)}</Text>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')}>
+            <View style={{ flex: 1 }}>
+                <HerFlatList
+                    numColumns={2}
+                    flatListId="table-list"
+                    data={this.state.tables}
+                    // nextPage={this.props.nextOrderPage}
+                    render={this.renderTableCard}
+                    dispatch={this.props.dispatch}
+                />
+                {/* <View
+                    style={{
+                        backgroundColor: 'lightgray',
+                        padding: getXdp(2),
+                    }}
+                >
+                    {
+                        this.state.tables && this.state.tables.map((item, index) => (
+                            <View key={index}>
+                                {this.renderTableCard(item, index)}
+                            </View>
+                        ))
+                    }
+                </View> */}
+                <TouchableOpacity style={{ margin: 30, padding: 15, backgroundColor: 'tomato' }} onPress={() => this.props.navigation.navigate('Login')}>
                     <Text>Login</Text>
                 </TouchableOpacity>
             </View>
