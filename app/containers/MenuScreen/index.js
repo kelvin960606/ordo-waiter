@@ -59,10 +59,10 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         alert('onAddTopping');
     }
 
-    onToggleProductDetail = (details) => {
+    onToggleProductDetail = (id) => {
         this.setState({
             showProductDetail: !this.state.showProductDetail,
-            onDisplayDetail: details || null,
+            onDisplayId: id,
         });
     }
 
@@ -87,7 +87,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     renderMenuItem = (item) => (
         <TouchableOpacity
             // className={`${this.state.currentTableData[item.id || 1] ? 'active' : ''}`}
-            onPress={() => this.onToggleProductDetail(this.state.currentStatus[item.item.id])}
+            onPress={() => this.onToggleProductDetail(item.item.id)}
             style={{
                 borderStyle: 'solid',
                 borderWidth: 3,
@@ -99,7 +99,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         >
             <View style={{ borderColor: 'lightgray', borderWidth: 1 }}>
                 {
-                    dataChecking(this.state.currentStatus, item.item.id, 'count') &&
+                    dataChecking(this.state.currentStatus, item.item.id, 'items', 'length') &&
                         <View
                             className="counter-balloon"
                             style={{
@@ -114,7 +114,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold' }}>
-                                {this.state.currentStatus[item.item.id].count}
+                                {this.state.currentStatus[item.item.id].items.length}
                             </Text>
                         </View>
                 }
@@ -154,8 +154,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     );
 
     render() {
-        const { tempDetail, onDisplayDetail } = this.state;
-        const toBeDisplay = tempDetail || onDisplayDetail;
+        const { onDisplayId } = this.state;
         return (
             <View style={{ height: getYdp(80), position: 'relative' }}>
                 <Text style={{ paddingHorizontal: 10, paddingTop: 10, color: 'lightgray' }}>Total: 25 items</Text>
@@ -195,10 +194,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                         >
                             <TouchableOpacity
                                 onPress={() => {
-                                    alert('canceling change');
-                                    this.setState({
-                                        tempDetail: null,
-                                    });
+                                    // alert('canceling change');
                                     this.onToggleProductDetail();
                                 }}
                                 style={{
@@ -214,10 +210,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => {
-                                    alert('adding to order');
-                                    this.setState({
-                                        tempDetail: null,
-                                    });
+                                    // alert('adding to order');
                                     this.onToggleProductDetail();
                                 }}
                                 style={{
@@ -249,13 +242,13 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                     marginBottom: 5,
                                 }}
                             >
-                                Total: {dataChecking(toBeDisplay, 'items', 'length') || 0}
+                                Total: {dataChecking(this.state.currentStatus, onDisplayId, 'items', 'length') || 0}
                             </Text>
                             <View
                                 className="product-detail-item-group"
                             >
                                 {
-                                    dataChecking(toBeDisplay, 'items') && toBeDisplay.items.map((item, index) => (
+                                    dataChecking(this.state.currentStatus, onDisplayId, 'items') && this.state.currentStatus[onDisplayId].items.map((item, index) => (
                                         <View key={index}>
                                             <View
                                                 key={index}
@@ -311,11 +304,12 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                 <TouchableOpacity
                                     className="product-detail-item add-new-item"
                                     onPress={() => {
-                                        const newTempDetail = { ...toBeDisplay };
-                                        newTempDetail.items = newTempDetail.items || [];
-                                        newTempDetail.items.push({});
+                                        const newStatus = { ...this.state.currentStatus };
+                                        newStatus[onDisplayId] = newStatus[onDisplayId] || {};
+                                        newStatus[onDisplayId].items = newStatus[onDisplayId].items || [];
+                                        newStatus[onDisplayId].items.push({});
                                         this.setState({
-                                            tempDetail: newTempDetail,
+                                            currentStatus: newStatus,
                                         });
                                     }}
                                     style={{
