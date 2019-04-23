@@ -11,14 +11,13 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import firebase from 'react-native-firebase';
+import PriceTag from 'components/PriceTag';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import { getXdp, dataChecking } from 'app/globalUtils';
-import { globalScope } from 'app/globalScope';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
-import { getProductInfo } from './actions';
 import saga from './saga';
 import tableData from './table.js';
 
@@ -39,25 +38,11 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         //     firebase.auth().signInAnonymously()
         //         .then((user) => {
         //             console.log(JSON.stringify(user));
-        if (!globalScope.productData || !globalScope.productData.length) {
-            this.props.dispatch(getProductInfo());
-        }
         //         });
         // } catch (error) {
         //     alert(JSON.stringify(error));
         // }
         // this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { myappscreen } = nextProps;
-        if (myappscreen.productData && myappscreen.productData !== this.props.myappscreen.productData) {
-            // this.setState({
-            //     productData: myappscreen.productData,
-            // });
-            globalScope.productData = myappscreen.productData;
-        }
-        console.log(nextProps);
     }
 
     componentWillUnmount() {
@@ -92,6 +77,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             return (
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Menu', {
+                        item,
                         tableData: {
                             test: 123,
                             halo: 456,
@@ -129,6 +115,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         return (
             <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Menu', {
+                    orderedProducts: dataChecking(item, 'item', 'data', 'products'),
                     tableData: {
                         test: 123,
                         halo: 456,
@@ -187,9 +174,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     >
                         {
                             dataChecking(item, 'item', 'data', 'payment', 'total') &&
-                                <Text>
-                                    RM {Number(item.item.data.payment.total).toFixed(2)}
-                                </Text>
+                                <PriceTag value={item.item.data.payment.total} />
                         }
                     </View>
                     <View

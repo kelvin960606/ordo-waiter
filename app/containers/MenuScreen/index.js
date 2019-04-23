@@ -11,32 +11,58 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import CartScreen from 'containers/CartScreen';
-import { getXdp, getYdp } from 'app/globalUtils';
+import PriceTag from 'components/PriceTag';
+import { dataChecking, getXdp, getYdp } from 'app/globalUtils';
 import { globalScope } from 'app/globalScope';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectMenuScreen from './selectors';
 import reducer from './reducer';
+import { getProductInfo } from './actions';
 import saga from './saga';
+import productData from './productData';
 
 export class MenuScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {};
 
     componentWillMount = () => {
-        console.log(this.props.navigation.getParam('tableData', 'no data'));
+        this.setState({
+            currentStatus: this.props.navigation.getParam('orderedProducts', {}),
+        });
         // this.setState({
         //     currentTableData: this.props.tableData,
         // });
+        globalScope.productData = productData; // this line to be remove when dispatch working
+    }
+
+    componentDidMount() {
+        if (!globalScope.productData || !globalScope.productData.length) {
+            // this.props.dispatch(getProductInfo());
+            globalScope.productData = productData;
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { menuscreen } = nextProps;
+        if (menuscreen.productData && menuscreen.productData !== this.props.menuscreen.productData) {
+            // this.setState({
+            //     productData: menuscreen.productData,
+            // });
+            globalScope.productData = menuscreen.productData;
+            console.log(JSON.stringify(globalScope.productData));
+        }
+        console.log(nextProps);
     }
 
     onAddTopping = () => {
         alert('onAddTopping');
     }
 
-    onToggleProductDetail = () => {
+    onToggleProductDetail = (details) => {
         this.setState({
             showProductDetail: !this.state.showProductDetail,
+            onDisplayDetail: details || null,
         });
     }
 
@@ -58,46 +84,53 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         return `http://placekitten.com/${num}/${num}`;
     }
 
-    renderMenuCard = (item) => (
+    renderMenuItem = (item) => (
         <TouchableOpacity
             // className={`${this.state.currentTableData[item.id || 1] ? 'active' : ''}`}
-            onPress={() => this.onToggleProductDetail(item)}
+            onPress={() => this.onToggleProductDetail(this.state.currentStatus[item.item.id])}
             style={{
                 borderStyle: 'solid',
                 borderWidth: 3,
-                borderColor: true ? '#E89558' : 'lightgray',
+                borderColor: this.state.currentStatus[item.item.id] ? '#E89558' : 'transparent',
                 width: getXdp(46),
                 margin: getXdp(2),
                 position: 'relative',
             }}
         >
-            <View
-                className="counter-balloon"
-                style={{
-                    top: -12,
-                    right: -12,
-                    zIndex: 1,
-                    borderRadius: 50,
-                    paddingVertical: 5,
-                    paddingHorizontal: 10,
-                    position: 'absolute',
-                    backgroundColor: '#E89558',
-                }}
-            >
-                <Text style={{ color: 'white', fontWeight: 'bold' }}>{1}</Text>
-            </View>
-            <View>
-                <Image style={{ height: getXdp(44.5), width: getXdp(44.5) }} source={{ uri: this.randomKitten() }} />
-            </View>
-            <View
-                style={{
-                    backgroundColor: 'white',
-                    padding: getXdp(2),
-                }}
-            >
-                <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>Menu item code</Text>
-                <Text style={{ marginBottom: 10 }}>Menu item name</Text>
-                <Text>Menu item price</Text>
+            <View style={{ borderColor: 'lightgray', borderWidth: 1 }}>
+                {
+                    dataChecking(this.state.currentStatus, item.item.id, 'count') &&
+                        <View
+                            className="counter-balloon"
+                            style={{
+                                top: -12,
+                                right: -12,
+                                zIndex: 1,
+                                borderRadius: 50,
+                                paddingVertical: 5,
+                                paddingHorizontal: 10,
+                                position: 'absolute',
+                                backgroundColor: '#E89558',
+                            }}
+                        >
+                            <Text style={{ color: 'white', fontWeight: 'bold' }}>
+                                {this.state.currentStatus[item.item.id].count}
+                            </Text>
+                        </View>
+                }
+                <View>
+                    <Image style={{ height: getXdp(44.5), width: getXdp(44.5) }} source={{ uri: this.randomKitten() }} />
+                </View>
+                <View
+                    style={{
+                        backgroundColor: 'white',
+                        padding: getXdp(2),
+                    }}
+                >
+                    <Text style={{ fontWeight: 'bold', marginBottom: 5 }}>{item.item.product_code}</Text>
+                    <Text style={{ marginBottom: 10 }}>{item.item.product_name}</Text>
+                    <PriceTag value={item.item.product_price} />
+                </View>
             </View>
         </TouchableOpacity>
     );
@@ -121,6 +154,8 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     );
 
     render() {
+        const { tempDetail, onDisplayDetail } = this.state;
+        const toBeDisplay = tempDetail || onDisplayDetail;
         return (
             <View style={{ height: getYdp(80), position: 'relative' }}>
                 <Text style={{ paddingHorizontal: 10, paddingTop: 10, color: 'lightgray' }}>Total: 25 items</Text>
@@ -159,7 +194,13 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }}
                         >
                             <TouchableOpacity
-                                onPress={this.onToggleProductDetail}
+                                onPress={() => {
+                                    alert('canceling change');
+                                    this.setState({
+                                        tempDetail: null,
+                                    });
+                                    this.onToggleProductDetail();
+                                }}
                                 style={{
                                     top: 10,
                                     right: 10,
@@ -174,6 +215,9 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             <TouchableOpacity
                                 onPress={() => {
                                     alert('adding to order');
+                                    this.setState({
+                                        tempDetail: null,
+                                    });
                                     this.onToggleProductDetail();
                                 }}
                                 style={{
@@ -205,13 +249,13 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                     marginBottom: 5,
                                 }}
                             >
-                                Total: {[{}, {}].length}
+                                Total: {dataChecking(toBeDisplay, 'items', 'length') || 0}
                             </Text>
                             <View
                                 className="product-detail-item-group"
                             >
                                 {
-                                    [{}, {}].map((item, index) => (
+                                    dataChecking(toBeDisplay, 'items') && toBeDisplay.items.map((item, index) => (
                                         <View key={index}>
                                             <View
                                                 key={index}
@@ -220,15 +264,24 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                                     width: getXdp(74),
                                                     borderColor: 'salmon',
                                                     borderWidth: 1,
-                                                    paddingVertical: 15,
+                                                    paddingVertical: 20,
                                                     paddingLeft: 50,
                                                     paddingRight: 20,
                                                     marginBottom: 10,
                                                 }}
                                             >
                                                 <Text style={{ position: 'absolute', left: 10, top: 15, fontSize: 20 }}>{index + 1}</Text>
-                                                <Text>- Less Spicy</Text>
-                                                <Text>- Add Noodle</Text>
+                                                <View>
+                                                    {
+                                                        item.topping && item.topping.map((topping, index2) => (
+                                                            <Text key={index2}>{`- ${topping.toppingId}`}</Text>
+                                                        ))
+                                                    }
+                                                    {
+                                                        !dataChecking(item, 'topping', 'length') &&
+                                                            <Text style={{ color: 'lightgray' }}>No topping yet</Text>
+                                                    }
+                                                </View>
                                                 <TouchableOpacity
                                                     onPress={this.onToggleTopping}
                                                     style={{
@@ -255,6 +308,26 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         </View>
                                     ))
                                 }
+                                <TouchableOpacity
+                                    className="product-detail-item add-new-item"
+                                    onPress={() => {
+                                        const newTempDetail = { ...toBeDisplay };
+                                        newTempDetail.items = newTempDetail.items || [];
+                                        newTempDetail.items.push({});
+                                        this.setState({
+                                            tempDetail: newTempDetail,
+                                        });
+                                    }}
+                                    style={{
+                                        width: getXdp(74),
+                                        borderColor: 'salmon',
+                                        borderWidth: 1,
+                                        paddingVertical: 15,
+                                        marginBottom: 10,
+                                    }}
+                                >
+                                    <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center' }}>+</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                 }
@@ -362,7 +435,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             numColumns={2}
                             data={globalScope.productData}
                             // nextPage={this.props.nextOrderPage}
-                            renderItem={this.renderMenuCard}
+                            renderItem={this.renderMenuItem}
                             // onEndReached={() => { alert('on end reach'); }}
                             // onEndReachedThreshold={0.3}
                             // onViewableItemsChanged={this.props.onViewChanged}
