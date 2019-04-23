@@ -203,7 +203,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     // onEndReached={() => { alert('on end reach'); }}
                     // onEndReachedThreshold={0.3}
                     // onViewableItemsChanged={this.props.onViewChanged}
-                    // keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => index}
                 />
                 <TouchableOpacity style={{ margin: 30, padding: 15, backgroundColor: 'tomato' }} onPress={() => this.props.navigation.navigate('Login')}>
                     <Text>Login</Text>

@@ -82,11 +82,7 @@ const tableData = [
                 2: {
                     count: 3,
                     items: [{
-                        topping: [{
-                            toppingId: 1,
-                        }, {
-                            toppingId: 2,
-                        }],
+                        topping: [1, 2],
                     }, {
 
                     }, {}],

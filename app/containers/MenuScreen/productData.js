@@ -30,7 +30,14 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: [],
+        toppings: {
+            1: {
+                toppingText: 'Add Noodles',
+            },
+            2: {
+                toppingText: 'Add Sunny Side Egg',
+            },
+        },
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',
@@ -68,7 +75,7 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: [],
+        toppings: {},
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',
@@ -106,7 +113,7 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: [],
+        toppings: {},
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',
@@ -144,7 +151,7 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: [],
+        toppings: {},
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',
@@ -182,7 +189,7 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: [],
+        toppings: {},
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',
