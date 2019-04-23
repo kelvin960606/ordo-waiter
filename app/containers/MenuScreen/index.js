@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import CartScreen from 'containers/CartScreen';
 import { getXdp, getYdp } from 'app/globalUtils';
+import { globalScope } from 'app/globalScope';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -211,7 +212,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             >
                                 {
                                     [{}, {}].map((item, index) => (
-                                        <View>
+                                        <View key={index}>
                                             <View
                                                 key={index}
                                                 className="product-detail-item"
@@ -355,17 +356,18 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                         </View>
                 }
                 {
-                    <FlatList
-                        style={{ paddingTop: 10 }}
-                        numColumns={2}
-                        data={[{}, {}, {}, {}, {}]}
-                        // nextPage={this.props.nextOrderPage}
-                        renderItem={this.renderMenuCard}
-                        // onEndReached={() => { alert('on end reach'); }}
-                        // onEndReachedThreshold={0.3}
-                        // onViewableItemsChanged={this.props.onViewChanged}
-                        // keyExtractor={(item, index) => index}
-                    />
+                    globalScope.productData &&
+                        <FlatList
+                            style={{ paddingTop: 10 }}
+                            numColumns={2}
+                            data={globalScope.productData}
+                            // nextPage={this.props.nextOrderPage}
+                            renderItem={this.renderMenuCard}
+                            // onEndReached={() => { alert('on end reach'); }}
+                            // onEndReachedThreshold={0.3}
+                            // onViewableItemsChanged={this.props.onViewChanged}
+                            // keyExtractor={(item, index) => index}
+                        />
                 }
                 <TouchableOpacity
                     className="view-cart-button"

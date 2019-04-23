@@ -14,7 +14,8 @@ import firebase from 'react-native-firebase';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { getXdp, dataChecking } from '../../globalUtils';
+import { getXdp, dataChecking } from 'app/globalUtils';
+import { globalScope } from 'app/globalScope';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
 import { getProductInfo } from './actions';
@@ -38,12 +39,25 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         //     firebase.auth().signInAnonymously()
         //         .then((user) => {
         //             console.log(JSON.stringify(user));
-        this.props.dispatch(getProductInfo());
+        if (!globalScope.productData || !globalScope.productData.length) {
+            this.props.dispatch(getProductInfo());
+        }
         //         });
         // } catch (error) {
         //     alert(JSON.stringify(error));
         // }
         // this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        const { myappscreen } = nextProps;
+        if (myappscreen.productData && myappscreen.productData !== this.props.myappscreen.productData) {
+            // this.setState({
+            //     productData: myappscreen.productData,
+            // });
+            globalScope.productData = myappscreen.productData;
+        }
+        console.log(nextProps);
     }
 
     componentWillUnmount() {
@@ -171,7 +185,12 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             left: getXdp(2),
                         }}
                     >
-                        <Text>RM {dataChecking(item, 'item', 'data', 'payment', 'total')}</Text>
+                        {
+                            dataChecking(item, 'item', 'data', 'payment', 'total') &&
+                                <Text>
+                                    RM {Number(item.item.data.payment.total).toFixed(2)}
+                                </Text>
+                        }
                     </View>
                     <View
                         className="bottom-right"

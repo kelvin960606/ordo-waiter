@@ -16,14 +16,16 @@ export function getProductInfo() {
     };
 }
 
-export function getProductInfoSuccess() {
+export function getProductInfoSuccess(payload) {
     return {
         type: GET_PRODUCT_INFO_SUCCESS,
+        data: payload.data,
     };
 }
 
-export function getProductInfoFailed() {
+export function getProductInfoFailed(payload) {
     return {
         type: GET_PRODUCT_INFO_FAILED,
+        data: payload.data,
     };
 }
