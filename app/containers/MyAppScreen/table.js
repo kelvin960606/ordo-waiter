@@ -79,15 +79,17 @@ const tableData = [
                 pin: '6178',
             },
             products: {
-                1: {
-                    count: 2,
+                2: {
+                    count: 3,
                     items: [{
                         topping: [{
                             toppingId: 1,
                         }, {
-                            toppingId: 1,
+                            toppingId: 2,
                         }],
-                    }],
+                    }, {
+
+                    }, {}],
                 },
                 3: {
                     count: 1,
