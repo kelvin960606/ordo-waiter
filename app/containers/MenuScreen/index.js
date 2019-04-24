@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -19,7 +19,7 @@ import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectMenuScreen from './selectors';
 import reducer from './reducer';
-import { getProductInfo } from './actions';
+import { getProductData } from './actions';
 import saga from './saga';
 import productData from './productData';
 
@@ -30,27 +30,9 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         this.setState({
             currentStatus: this.props.navigation.getParam('orderedProducts', {}),
         });
-        // this.setState({
-        //     currentTableData: this.props.tableData,
-        // });
-        globalScope.productData = productData; // this line to be remove when dispatch working
-    }
 
-    componentDidMount() {
         if (!globalScope.productData || !globalScope.productData.length) {
-            // this.props.dispatch(getProductInfo());
-            globalScope.productData = productData;
-        }
-        // console.log(this.props.navigation.getParam('tableData', 'no data'));
-    }
-
-    componentWillReceiveProps(nextProps) {
-        const { menuscreen } = nextProps;
-        if (menuscreen.productData && menuscreen.productData !== this.props.menuscreen.productData) {
-            // this.setState({
-            //     productData: menuscreen.productData,
-            // });
-            globalScope.productData = menuscreen.productData;
+            this.props.dispatch(getProductData());
         }
     }
 
@@ -92,6 +74,9 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
             showCart: !this.state.showCart,
         });
     }
+
+    getProductDataFromAsyncStore = async () => AsyncStorage.getItem('productData');
+    setProductDataFromAsyncStore = async (data) => AsyncStorage.setItem('productData', data);
 
     randomKitten = () => {
         const num = Math.floor((Math.random() * 100) + 200);

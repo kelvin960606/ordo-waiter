@@ -5,27 +5,27 @@
  */
 
 import {
-    GET_PRODUCT_INFO,
-    GET_PRODUCT_INFO_SUCCESS,
-    GET_PRODUCT_INFO_FAILED,
+    GET_PRODUCT_DATA,
+    GET_PRODUCT_DATA_SUCCESS,
+    GET_PRODUCT_DATA_FAILED,
 } from './constants';
 
-export function getProductInfo() {
+export function getProductData() {
     return {
-        type: GET_PRODUCT_INFO,
+        type: GET_PRODUCT_DATA,
     };
 }
 
-export function getProductInfoSuccess(payload) {
+export function getProductDataSuccess(payload) {
     return {
-        type: GET_PRODUCT_INFO_SUCCESS,
-        data: payload.data,
+        type: GET_PRODUCT_DATA_SUCCESS,
+        payload,
     };
 }
 
-export function getProductInfoFailed(payload) {
+export function getProductDataFailed(payload) {
     return {
-        type: GET_PRODUCT_INFO_FAILED,
-        data: payload.data,
+        type: GET_PRODUCT_DATA_FAILED,
+        payload,
     };
 }

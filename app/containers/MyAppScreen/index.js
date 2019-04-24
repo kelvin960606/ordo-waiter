@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import firebase from 'react-native-firebase';
 import PriceTag from 'components/PriceTag';
+import { globalScope } from 'app/globalScope';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -25,9 +26,13 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
     static navigationOptions = ({ navigation }) => ({
         headerRight: (
             <TouchableOpacity
+                className="logout-button"
                 style={{ width: 40 }}
                 onPress={async () => {
+                    globalScope.token = null;
                     await AsyncStorage.removeItem('ordo_token');
+                    globalScope.productData = null;
+                    await AsyncStorage.removeItem('productData');
                     navigation.navigate('AuthLoading');
                 }}
             >

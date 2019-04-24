@@ -2,6 +2,6 @@
 export const globalScope = {
     api: 'http://ordo-koa.herokuapp.com',
     isConnected: true,
-    productData: [],
+    productData: null,
     token: '',
 };
