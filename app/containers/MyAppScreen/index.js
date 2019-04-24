@@ -53,7 +53,8 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
         this.unsubscribe = null;
         this.state = {
-            // tables: tableData,
+            tables: {},
+            targetTabldIndex: null,
         };
     }
 
@@ -62,7 +63,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             // should change to normal signIn
             firebase.auth().signInAnonymously()
                 .then((user) => {
-                    console.log(JSON.stringify(user));
+                    // console.log(JSON.stringify(user));
                 });
         } catch (error) {
             alert(JSON.stringify(error));
@@ -86,7 +87,6 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                 });
             });
             this.setState({ tables: tb });
-            console.log('this.state.tables', tb);
         } else {
             console.log('document not found');
         }
@@ -270,22 +270,24 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     // onEndReached={() => { alert('on end reach'); }}
                     // onEndReachedThreshold={0.3}
                     // onViewableItemsChanged={this.props.onViewChanged}
-                    keyExtractor={(item, index) => index}
+                    keyExtractor={(item, index) => `${index}`}
                 />
                 <ModalWrapper
                     position="right"
                     containerStyle={{ marginVertical: 100 }}
-                    onRequestClose={() => this.setState({ showMenuScreen: false })}
+                    onRequestClose={() => this.setState({ showMenuScreen: false, targetTabldIndex: null })}
                     style={{ flex: 1 }}
                     shouldAnimateOnRequestClose={true}
                     visible={this.state.showMenuScreen || false}
                 >
                     {
-                        this.state.tables && this.state.targetTabldIndex &&
+                        (this.state.tables && this.state.targetTabldIndex !== null) ?
                             <MenuScreen
-                                orderedProducts={this.state.tables[this.state.targetTabldIndex].data.products}
-                                onToggleMenu={() => this.setState({ showMenuScreen: false })}
+                                currentTableData={this.state.tables[this.state.targetTabldIndex]}
+                                onToggleMenu={() => this.setState({ showMenuScreen: false, targetTabldIndex: null })}
                             />
+                            :
+                            <Text>Opps, something wrong...</Text>
                     }
                 </ModalWrapper>
             </View>

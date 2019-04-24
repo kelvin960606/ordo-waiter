@@ -13,7 +13,7 @@ import { getXdp } from 'app/globalUtils';
 class PriceTag extends React.Component { // eslint-disable-line react/prefer-stateless-function
     render() {
         return (
-            <Text style={{ fontSize: getXdp(1.8) }}>{`${this.props.currency ? this.props.currency : 'RM'} ${Number(this.props.value).toFixed(2)}`}</Text>
+            <Text style={{ fontSize: getXdp(1.8), ...this.props.style }}>{`${this.props.currency ? this.props.currency : 'RM'} ${Number(this.props.value).toFixed(2)}`}</Text>
         );
     }
 }

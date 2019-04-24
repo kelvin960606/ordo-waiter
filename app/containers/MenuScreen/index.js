@@ -28,7 +28,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
 
     componentWillMount = () => {
         this.setState({
-            currentStatus: this.props.orderedProducts || {},
+            currentCart: dataChecking(this.props.currentTableData, 'data', 'products') || {},
         });
 
         if (!globalScope.productData || !globalScope.productData.length) {
@@ -39,7 +39,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     componentWillReceiveProps(nextProps) {
         if (nextProps.orderedProducts !== this.state.orderedProducts) {
             this.setState({
-                currentStatus: nextProps.orderedProducts || {},
+                currentCart: nextProps.orderedProducts || {},
             });
         }
 
@@ -48,13 +48,12 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                 getProductLoading: nextProps.getProductLoading,
             });
         }
-        console.log(nextProps);
     }
 
     onManageTopping = (toppingId) => {
         const { onDisplayProduct, onEditToppingProductIndex } = this.state;
-        const newStatus = { ...this.state.currentStatus };
-        const productItem = newStatus[onDisplayProduct.id].items[onEditToppingProductIndex];
+        const newCart = { ...this.state.currentCart };
+        const productItem = newCart[onDisplayProduct.id].items[onEditToppingProductIndex];
         productItem.topping = productItem.topping || [];
 
         const idInNumber = Number(toppingId);
@@ -66,7 +65,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         }
 
         this.setState({
-            currentStatus: newStatus,
+            currentCart: newCart,
         });
     }
 
@@ -104,7 +103,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
             style={{
                 borderStyle: 'solid',
                 borderWidth: 3,
-                borderColor: this.state.currentStatus[dataObj.item.id] ? '#E89558' : 'transparent',
+                borderColor: this.state.currentCart[dataObj.item.id] ? '#E89558' : 'transparent',
                 width: getXdp(92 / globalScope.numColumnForSmallCard),
                 margin: getXdp(1),
                 position: 'relative',
@@ -112,7 +111,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         >
             <View style={{ borderColor: 'lightgray', borderWidth: 1 }}>
                 {
-                    dataChecking(this.state.currentStatus, dataObj.item.id, 'items', 'length') &&
+                    dataChecking(this.state.currentCart, dataObj.item.id, 'items', 'length') &&
                         <View
                             className="counter-balloon"
                             style={{
@@ -129,7 +128,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getXdp(2.5) }}>
-                                {this.state.currentStatus[dataObj.item.id].items.length}
+                                {this.state.currentCart[dataObj.item.id].count}
                             </Text>
                         </View>
                 }
@@ -203,8 +202,8 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     );
 
     renderToppingItem = (dataObj) => {
-        const { currentStatus, onDisplayProduct, onEditToppingProductIndex } = this.state;
-        const topping = currentStatus[onDisplayProduct.id].items[onEditToppingProductIndex].topping || [];
+        const { currentCart, onDisplayProduct, onEditToppingProductIndex } = this.state;
+        const topping = currentCart[onDisplayProduct.id].items[onEditToppingProductIndex].topping || [];
 
         return (
             <TouchableOpacity
@@ -318,7 +317,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                                 fontSize: getXdp(2),
                                             }}
                                         >
-                                            Total: {dataChecking(this.state.currentStatus, onDisplayProduct.id, 'items', 'length') || 0}
+                                            Total: {dataChecking(this.state.currentCart, onDisplayProduct.id, 'items', 'length') || 0}
                                         </Text>
                                         <View
                                             className="product-detail-item-group"
@@ -328,7 +327,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         >
                                             <FlatList
                                                 numColumns={1}
-                                                data={dataChecking(this.state.currentStatus, onDisplayProduct.id, 'items') || []}
+                                                data={dataChecking(this.state.currentCart, onDisplayProduct.id, 'items') || []}
                                                 // nextPage={this.props.nextOrderPage}
                                                 renderItem={this.renderProductItem}
                                                 // onEndReached={() => { alert('on end reach'); }}
@@ -339,12 +338,12 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                                     <TouchableOpacity
                                                         className="product-detail-item add-new-item"
                                                         onPress={() => {
-                                                            const newStatus = { ...this.state.currentStatus };
-                                                            newStatus[onDisplayProduct.id] = newStatus[onDisplayProduct.id] || {};
-                                                            newStatus[onDisplayProduct.id].items = newStatus[onDisplayProduct.id].items || [];
-                                                            newStatus[onDisplayProduct.id].items.push({});
+                                                            const newCart = { ...this.state.currentCart };
+                                                            newCart[onDisplayProduct.id] = newCart[onDisplayProduct.id] || { count: 0, items: [] };
+                                                            newCart[onDisplayProduct.id].items.push({});
+                                                            newCart[onDisplayProduct.id].count += 1;
                                                             this.setState({
-                                                                currentStatus: newStatus,
+                                                                currentCart: newCart,
                                                             });
                                                         }}
                                                         style={{
@@ -449,13 +448,13 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         <View className="manage-topping-item-group" style={{ maxHeight: getYdp(55) }}>
                                             <FlatList
                                                 numColumns={globalScope.numColumnForSmallCard}
-                                                data={Object.keys(dataChecking(this.state.onDisplayProduct, 'toppings') || {})}
+                                                data={Object.keys(dataChecking(this.state.onDisplayProduct, 'toppings') || [])}
                                                 // nextPage={this.props.nextOrderPage}
                                                 renderItem={this.renderToppingItem}
                                                 // onEndReached={() => { alert('on end reach'); }}
                                                 // onEndReachedThreshold={0.3}
                                                 // onViewableItemsChanged={this.props.onViewChanged}
-                                                keyExtractor={(item, index) => index}
+                                                keyExtractor={(item, index) => `${index}`}
                                             />
                                         </View>
                                     </View>
@@ -471,7 +470,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         // onEndReached={() => { alert('on end reach'); }}
                                         // onEndReachedThreshold={0.3}
                                         // onViewableItemsChanged={this.props.onViewChanged}
-                                        keyExtractor={(item, index) => index}
+                                        keyExtractor={(item, index) => `${index}`}
                                     />
                             }
                             <TouchableOpacity
@@ -502,8 +501,11 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             </TouchableOpacity>
 
                             <CartScreen
+                                currentTableData={this.props.currentTableData}
+                                currentCartData={this.state.currentCart}
                                 visible={this.state.showCart}
                                 toggle={this.onToggleCartMenu}
+                                onCancelOrder={this.props.onToggleMenu}
                             />
                         </View>
                 }

@@ -32,9 +32,11 @@ const productData = [
         },
         toppings: {
             1: {
+                toppingId: 1,
                 toppingText: 'Add Noodles',
             },
             2: {
+                toppingId: 2,
                 toppingText: 'Add Sunny Side Egg',
             },
         },

@@ -7,7 +7,6 @@ import { DEFAULT_ACTION } from './constants';
 
 export function* worker() {
     const response = yield call(apiRequest, '', 'get');
-    console.log(response);
     if (response && response.ok) {
         yield put(defaultAction(response));
     } else {

@@ -80,6 +80,7 @@ const tableData = [
             },
             products: {
                 2: {
+                    count: 3,
                     items: [{
                         topping: [1, 2],
                     }, {
@@ -87,6 +88,7 @@ const tableData = [
                     }, {}],
                 },
                 3: {
+                    count: 1,
                     items: [{}],
                 },
             },
@@ -156,6 +158,7 @@ const tableData = [
             },
             products: {
                 2: {
+                    count: 3,
                     items: [{
                         topping: [1, 2],
                     }, {
@@ -163,6 +166,7 @@ const tableData = [
                     }, {}],
                 },
                 3: {
+                    count: 1,
                     items: [{}],
                 },
             },
