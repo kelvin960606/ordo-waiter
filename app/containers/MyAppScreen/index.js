@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -15,13 +15,31 @@ import PriceTag from 'components/PriceTag';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
-import { getXdp, dataChecking } from 'app/globalUtils';
+import { getXdp, getYdp, dataChecking } from 'app/globalUtils';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
 import saga from './saga';
 import tableData from './table.js';
 
 export class MyAppScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
+    static navigationOptions = ({ navigation }) => ({
+        headerRight: (
+            <TouchableOpacity
+                style={{ width: 40 }}
+                onPress={async () => {
+                    await AsyncStorage.removeItem('ordo_token');
+                    navigation.navigate('AuthLoading');
+                }}
+            >
+                <Image
+                    resizeMode="contain"
+                    style={{ marginRight: 10, padding: 10, height: 30, widht: 30, color: '#E89558' }}
+                    source={{ uri: 'https://img.icons8.com/material/48/000000/logout-rounded.png' }}
+                />
+            </TouchableOpacity>
+        ),
+    });
+
     constructor(props) {
         super(props);
         this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
@@ -77,11 +95,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             return (
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Menu', {
-                        item,
-                        tableData: {
-                            test: 123,
-                            halo: 456,
-                        },
+                        orderedProducts: {},
                     })}
                 >
                     <View
@@ -116,10 +130,6 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Menu', {
                     orderedProducts: dataChecking(item, 'item', 'data', 'products'),
-                    tableData: {
-                        test: 123,
-                        halo: 456,
-                    },
                 })}
             >
                 <View
@@ -194,7 +204,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
 
     render() {
         return (
-            <View style={{ margin: getXdp(1), backgroundColor: '#EEE' }}>
+            <View style={{ margin: getXdp(1), backgroundColor: '#EEE', height: getYdp(80) }}>
                 <FlatList
                     numColumns={2}
                     data={this.state.tables}
@@ -205,9 +215,6 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     // onViewableItemsChanged={this.props.onViewChanged}
                     keyExtractor={(item, index) => index}
                 />
-                <TouchableOpacity style={{ margin: 30, padding: 15, backgroundColor: 'tomato' }} onPress={() => this.props.navigation.navigate('Login')}>
-                    <Text>Login</Text>
-                </TouchableOpacity>
             </View>
         );
     }
