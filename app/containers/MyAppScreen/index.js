@@ -33,7 +33,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             >
                 <Image
                     resizeMode="contain"
-                    style={{ marginRight: 10, padding: 10, height: 30, widht: 30, color: '#E89558' }}
+                    style={{ marginRight: 10, padding: 10, height: 30, width: 30, tintColor: 'tomato' }}
                     source={{ uri: 'https://img.icons8.com/material/48/000000/logout-rounded.png' }}
                 />
             </TouchableOpacity>

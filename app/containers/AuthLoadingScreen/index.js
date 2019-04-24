@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { Text, SafeAreaView, AsyncStorage } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -26,6 +26,8 @@ export class AuthLoadingScreen extends React.PureComponent { // eslint-disable-l
 
     // Fetch the token from storage then navigate to our appropriate place
     checkAuth = async () => {
+        globalScope.token = await AsyncStorage.getItem('ordo_token');
+
         this.props.navigation.navigate(globalScope.token ? 'App' : 'Auth');
     };
 
