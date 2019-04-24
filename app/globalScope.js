@@ -4,4 +4,7 @@ export const globalScope = {
     isConnected: true,
     productData: null,
     token: '',
+    numColumnForSmallCard: 4,
+    marginForSmallCard: 1,
+    paddingForSmallCard: 2,
 };

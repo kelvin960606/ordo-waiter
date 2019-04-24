@@ -17,10 +17,12 @@ const initialState = fromJS({});
 function menuScreenReducer(state = initialState, action) {
     switch (action.type) {
         case GET_PRODUCT_DATA:
-            return state;
+            return state
+                .set('getProductLoading', true);
         case GET_PRODUCT_DATA_SUCCESS:
         case GET_PRODUCT_DATA_FAILED:
             return state
+                .set('getProductLoading', false)
                 .set('getProductSuccess', dataChecking(action, 'payload', 'success'))
                 .set('getProductReturnMessage', dataChecking(action, 'payload', 'message'));
         default:

@@ -1416,6 +1416,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ordo.waiter;
 				PRODUCT_NAME = ordoWaiter;
+				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1441,6 +1442,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ordo.waiter;
 				PRODUCT_NAME = ordoWaiter;
+				TARGETED_DEVICE_FAMILY = 2;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

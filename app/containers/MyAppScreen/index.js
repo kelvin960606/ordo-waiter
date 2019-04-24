@@ -6,12 +6,15 @@
 
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, AsyncStorage } from 'react-native';
+
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 import firebase from 'react-native-firebase';
+import ModalWrapper from 'react-native-modal-wrapper';
 import PriceTag from 'components/PriceTag';
+import MenuScreen from 'containers/MenuScreen';
 import { globalScope } from 'app/globalScope';
 
 import injectSaga from 'utils/injectSaga';
@@ -50,103 +53,128 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
         this.unsubscribe = null;
         this.state = {
-            tables: tableData,
+            // tables: tableData,
         };
-        console.log('tabledata from json:', this.state.tables);
     }
 
     componentDidMount() {
-        // try {
-        //     // should change to normal signIn
-        //     firebase.auth().signInAnonymously()
-        //         .then((user) => {
-        //             console.log(JSON.stringify(user));
-        //         });
-        // } catch (error) {
-        //     alert(JSON.stringify(error));
-        // }
-        // this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
+        try {
+            // should change to normal signIn
+            firebase.auth().signInAnonymously()
+                .then((user) => {
+                    console.log(JSON.stringify(user));
+                });
+        } catch (error) {
+            alert(JSON.stringify(error));
+        }
+        this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
     }
 
     componentWillUnmount() {
-        // this.unsubscribe();
+        this.unsubscribe();
     }
 
     subscribeTables = (documentSnapshot) => {
         if (documentSnapshot.exists) {
             const data = documentSnapshot.data();
-            console.log(data);
             const { tables } = data;
-            // console.log('dining', dining);
-            console.log('tables', tables);
-            // console.log('takeaways', takeaways);
             const tb = [];
             Object.keys(tables).forEach((key) => {
-                console.log(key, tables[key]);
                 tb.push({
                     key,
                     data: tables[key],
                 });
             });
-            console.log('table', tb);
             this.setState({ tables: tb });
+            console.log('this.state.tables', tb);
         } else {
             console.log('document not found');
         }
     }
 
     renderTableCard = (item) => {
-        if (!dataChecking(item, 'item', 'data', 'status', 'dining')) {
-            return (
-                <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Menu', {
-                        orderedProducts: {},
-                    })}
-                >
-                    <View
-                        style={{
-                            borderStyle: 'dashed',
-                            borderWidth: 1,
-                            borderColor: 'gray',
-                            height: getXdp(45),
-                            width: getXdp(45),
-                            margin: getXdp(2),
-                            padding: getXdp(2),
-                        }}
-                    >
-                        <Text
-                            className="empty-text-display"
-                            style={{
-                                color: 'gray',
-                                fontSize: 16,
-                                fontWeight: 'bold',
-                                top: getXdp(19),
-                                textAlign: 'center',
-                            }}
-                        >
-                            EMPTY
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-            );
-        }
+        const status = dataChecking(item, 'item', 'data', 'status', 'dining');
+        // return (
+        //     <TouchableOpacity
+        //         onPress={() => {
+        //             this.setState({
+        //                 showMenuScreen: true,
+        //                 targetTabldIndex: item.index,
+        //             });
+        //         }}
+        //     >
+        //         <View
+        //             style={{
+        //                 borderStyle: 'dashed',
+        //                 borderWidth: 1,
+        //                 borderColor: 'gray',
+        //                 height: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
+        //                 width: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
+        //                 margin: getXdp(globalScope.marginForSmallCard),
+        //                 padding: getXdp(globalScope.paddingForSmallCard),
+        //             }}
+        //         >
+        //             <View
+        //                 style={{
+        //                     position: 'absolute',
+        //                     right: 0,
+        //                     top: 0,
+        //                 }}
+        //             >
+        //                 <Text
+        //                     className="table-code"
+        //                     style={{
+        //                         color: 'white',
+        //                         textAlign: 'center',
+        //                         fontSize: getXdp(3),
+        //                         fontWeight: 'bold',
+        //                         padding: getXdp(1.8),
+        //                         backgroundColor: dataChecking(item, 'item', 'data', 'status', 'dining') ? 'red' : 'gray',
+        //                     }}
+        //                 >
+        //                     {dataChecking(item, 'item', 'key')}
+        //                 </Text>
+        //                 <Text
+        //                     style={{ fontSize: getXdp(1) }}
+        //                 >
+        //                     Order Created
+        //                 </Text>
+        //             </View>
+        //             <Text
+        //                 className="empty-text-display"
+        //                 style={{
+        //                     color: 'gray',
+        //                     fontSize: getXdp(2.5),
+        //                     fontWeight: 'bold',
+        //                     top: getXdp(7),
+        //                     textAlign: 'center',
+        //                 }}
+        //             >
+        //                 EMPTY
+        //             </Text>
+        //         </View>
+        //     </TouchableOpacity>
+        // );
 
         return (
             <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Menu', {
-                    orderedProducts: dataChecking(item, 'item', 'data', 'products'),
-                })}
+                onPress={() => {
+                    this.setState({
+                        showMenuScreen: true,
+                        targetTabldIndex: item.index,
+                    });
+                }}
             >
                 <View
                     style={{
                         borderStyle: 'dashed',
                         borderWidth: 1,
                         borderColor: 'gray',
-                        height: getXdp(46),
-                        width: getXdp(46),
-                        margin: getXdp(2),
-                        padding: getXdp(2),
-                        backgroundColor: 'white',
+                        height: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
+                        width: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
+                        margin: getXdp(globalScope.marginForSmallCard),
+                        padding: getXdp(globalScope.paddingForSmallCard),
+                        backgroundColor: status ? 'white' : '',
                     }}
                 >
                     <View
@@ -161,47 +189,71 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             style={{
                                 color: 'white',
                                 textAlign: 'center',
-                                fontSize: 25,
+                                fontSize: getXdp(3),
                                 fontWeight: 'bold',
-                                padding: getXdp(2),
-                                backgroundColor: dataChecking(item, 'item', 'data', 'status', 'dining') ? 'red' : 'red',
+                                padding: getXdp(1.8),
+                                backgroundColor: status ? 'tomato' : 'gray',
                             }}
                         >
                             {dataChecking(item, 'item', 'key')}
                         </Text>
-                        <Text
-                            style={{ fontSize: 7 }}
+                        {/* <Text
+                            style={{ fontSize: getXdp(1) }}
                         >
                             Order Created
-                        </Text>
+                        </Text> */}
                     </View>
-                    <View className="top-left">
-                        <Text>logo</Text>
-                        <Text>{dataChecking(item, 'item', 'data', 'info', 'pax')}pax</Text>
-                    </View>
-                    <View
-                        className="bottom-left"
-                        style={{
-                            position: 'absolute',
-                            bottom: getXdp(2),
-                            left: getXdp(2),
-                        }}
-                    >
-                        {
-                            dataChecking(item, 'item', 'data', 'payment', 'total') &&
-                                <PriceTag value={item.item.data.payment.total} />
-                        }
-                    </View>
-                    <View
-                        className="bottom-right"
-                        style={{
-                            position: 'absolute',
-                            bottom: getXdp(2),
-                            right: getXdp(2),
-                        }}
-                    >
-                        <Text>xx mins ago</Text>
-                    </View>
+                    {
+                        status &&
+                            <View className="top-left">
+                                <Image source={require('../../assets/images/people.png')} style={{ tintColor: 'gray', width: getXdp(4), height: getXdp(4) }} />
+                                <Text style={{ fontSize: getXdp(2) }}>{dataChecking(item, 'item', 'data', 'info', 'pax')}pax</Text>
+                            </View>
+                    }
+                    {
+                        status &&
+                            <View
+                                className="bottom-left"
+                                style={{
+                                    position: 'absolute',
+                                    bottom: getXdp(2),
+                                    left: getXdp(2),
+                                }}
+                            >
+                                {
+                                    dataChecking(item, 'item', 'data', 'payment', 'total') &&
+                                        <PriceTag value={item.item.data.payment.total} />
+                                }
+                            </View>
+                    }
+                    {
+                        status &&
+                            <View
+                                className="bottom-right"
+                                style={{
+                                    position: 'absolute',
+                                    bottom: getXdp(2),
+                                    right: getXdp(2),
+                                }}
+                            >
+                                <Text style={{ fontSize: getXdp(1.8) }}>10 mins ago</Text>
+                            </View>
+                    }
+                    {
+                        !status &&
+                            <Text
+                                className="empty-text-display"
+                                style={{
+                                    color: 'gray',
+                                    fontSize: getXdp(2.5),
+                                    fontWeight: 'bold',
+                                    top: getXdp(7),
+                                    textAlign: 'center',
+                                }}
+                            >
+                                EMPTY
+                            </Text>
+                    }
                 </View>
             </TouchableOpacity>
         );
@@ -209,9 +261,9 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
 
     render() {
         return (
-            <View style={{ margin: getXdp(1), backgroundColor: '#EEE', height: getYdp(80) }}>
+            <View style={{ padding: getXdp(globalScope.marginForSmallCard), backgroundColor: '#EEE', height: getYdp(90) }}>
                 <FlatList
-                    numColumns={2}
+                    numColumns={globalScope.numColumnForSmallCard}
                     data={this.state.tables}
                     // nextPage={this.props.nextOrderPage}
                     renderItem={this.renderTableCard}
@@ -220,6 +272,22 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                     // onViewableItemsChanged={this.props.onViewChanged}
                     keyExtractor={(item, index) => index}
                 />
+                <ModalWrapper
+                    position="right"
+                    containerStyle={{ marginVertical: 100 }}
+                    onRequestClose={() => this.setState({ showMenuScreen: false })}
+                    style={{ flex: 1 }}
+                    shouldAnimateOnRequestClose={true}
+                    visible={this.state.showMenuScreen || false}
+                >
+                    {
+                        this.state.tables && this.state.targetTabldIndex &&
+                            <MenuScreen
+                                orderedProducts={this.state.tables[this.state.targetTabldIndex].data.products}
+                                onToggleMenu={() => this.setState({ showMenuScreen: false })}
+                            />
+                    }
+                </ModalWrapper>
             </View>
         );
     }

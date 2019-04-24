@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { globalScope } from 'app/globalScope';
+import { getXdp } from 'app/globalUtils';
 
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
@@ -22,16 +22,16 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
     render() {
         return (
             <View style={{ margin: 20 }}>
-                <Text style={{ paddingVertical: 30, fontSize: 30, fontWeight: 'bold', textAlign: 'center' }}>
+                <Text style={{ paddingVertical: 30, fontSize: getXdp(5), fontWeight: 'bold', textAlign: 'center' }}>
                     Welcome to Ordo
                 </Text>
                 <View style={{ margin: 10 }}>
                     <Text>Username: </Text>
-                    <TextInput style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: 16, borderRadius: 5 }}></TextInput>
+                    <TextInput style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: getXdp(2.5), borderRadius: 5 }}></TextInput>
                 </View>
                 <View style={{ margin: 10 }}>
                     <Text>Password: </Text>
-                    <TextInput secureTextEntry={true} style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: 16, borderRadius: 5 }}></TextInput>
+                    <TextInput secureTextEntry={true} style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: getXdp(2.5), borderRadius: 5 }}></TextInput>
                 </View>
                 <TouchableOpacity
                     style={{
@@ -42,11 +42,11 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
                         borderRadius: 15,
                     }}
                     onPress={async () => {
-                        await AsyncStorage.setItem('ordo_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU1NTA0MDkwMCwiZXhwIjoxNTU1MDQ0NTAwLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1qZjkydEBhbGxkZXItNjg3ZDAuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1qZjkydEBhbGxkZXItNjg3ZDAuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJ1aWQiOiJFMW5yYlJqY3hsWXd4WjZKeWpNNkFIWFJOQVEyIn0.GYrsq26IrKgw52WjRSDQAApCKGMWOq4Tm8nMiFf7OnGv3qm7mtTuBfx_Dc3ZBDgQfepHuGlUJk2OlADkm7Ve2BB7SDb49u3pnEWBhmPAaSgJLeva0d035FcwBd4N1RyvcYWRkdNtXAueoPrAc2wjrKvMw7X4YQgg6niKSXfgwZ5oeEvl8Dim8b2gdzyv1X515OB5O7wZfi5OmRBH1oP3wPPnLJhwdyh7bPS7FSGVIiDJhEFLMUbXMhgT-dF9yAufPhmEqybmjnhU8G-5VylrfIBM5GS3OlzowG1bODIVEVWgWNoZPsrPnXvYoYrbyhdf849UgSWgaf9RDDY8UbVraA');
+                        await AsyncStorage.setItem('ordo_token', 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTU1NTA0MDk4MiwiZXhwIjoxNTU1MDQ0NTgyLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1qZjkydEBhbGxkZXItNjg3ZDAuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1qZjkydEBhbGxkZXItNjg3ZDAuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJ1aWQiOiJieU1nOG5pRGZCZGFwOEswNWpBV2MyNm93U0ozIn0.Qs6N_i3byJ4lnzxlvlQojgZcAekMmm9oN_W85d1BkL4lSBdihQhdZxIxqPyyQkrJAFz-IwrrTZTOmbDJfg7FPiiYFhRIUOKlJ1W_L0-x_nb3gA1Krupiq9bSP0J7kCAC-wGbLsi365P3xwP1GxlAHDLt7MBZOYDZZdEaiqyuYgof8L4Mr-tvfcJbSN8e_ys6cRcyFVqu-SptkgtT7ln2uuTrOEoCrSfuSBuIG2-1IBpYMGySaGQ7DYpO3pOMOfikJdZJqDkMKU--ba8AdbGBeXucVk0hHY0-KWTafHaOqh423XlbYFecWS4q-82VBtjTY16yifN4c2dzNI9eIRJw9w');
                         this.props.navigation.navigate('AuthLoading');
                     }}
                 >
-                    <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', color: 'white' }}>Login</Text>
+                    <Text style={{ textAlign: 'center', fontSize: getXdp(3), fontWeight: 'bold', color: 'white' }}>Login</Text>
                 </TouchableOpacity>
             </View>
         );
