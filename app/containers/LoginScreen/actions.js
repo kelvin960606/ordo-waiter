@@ -10,10 +10,13 @@ import {
     STAFF_LOGIN_SUCCESS,
 } from './constants';
 
-export function staffLogin(params) {
+export function staffLogin(qr, pin) {
     return {
         type: STAFF_LOGIN,
-        payload: params,
+        payload: {
+            qr,
+            pin,
+        },
     };
 }
 
