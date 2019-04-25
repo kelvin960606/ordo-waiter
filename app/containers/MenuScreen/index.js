@@ -358,7 +358,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }
                             <TouchableOpacity
                                 className="close-menu-button"
-                                onPress={this.props.onToggleMenu}
+                                onPress={this.props.onCloseMenu}
                                 style={{
                                     position: 'absolute',
                                     top: getXdp(2),
@@ -396,7 +396,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                 currentCartData={this.state.currentCart}
                                 visible={this.state.showCart}
                                 toggle={this.onToggleCartMenu}
-                                onCancelOrder={this.props.onToggleMenu}
+                                onCancelOrder={this.props.onCloseMenu}
                             />
                         </View>
                 }
