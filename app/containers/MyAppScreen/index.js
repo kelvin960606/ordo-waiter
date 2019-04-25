@@ -25,12 +25,16 @@ import reducer from './reducer';
 import saga from './saga';
 import tableData from './table.js';
 
+const numColSmallCard = globalScope.numColumnForSmallCard;
+// const marginSmallCard = globalScope.marginForSmallCard;
+// const paddingSmallCard = globalScope.paddingForSmallCard;
+
 export class MyAppScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     static navigationOptions = ({ navigation }) => ({
         headerRight: (
             <TouchableOpacity
                 className="logout-button"
-                style={{ width: 40 }}
+                style={{ width: getXdp(4) }}
                 onPress={async () => {
                     globalScope.token = null;
                     await AsyncStorage.removeItem('ordo_token');
@@ -41,7 +45,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             >
                 <Image
                     resizeMode="contain"
-                    style={{ marginRight: 10, padding: 10, height: 30, width: 30, tintColor: 'tomato' }}
+                    style={{ marginRight: 10, padding: 10, height: getXdp(4), width: getXdp(4), tintColor: 'tomato' }}
                     source={{ uri: 'https://img.icons8.com/material/48/000000/logout-rounded.png' }}
                 />
             </TouchableOpacity>
@@ -59,15 +63,6 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
     }
 
     componentDidMount() {
-        try {
-            // should change to normal signIn
-            firebase.auth().signInAnonymously()
-                .then((user) => {
-                    // console.log(JSON.stringify(user));
-                });
-        } catch (error) {
-            alert(JSON.stringify(error));
-        }
         this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
     }
 
@@ -94,67 +89,6 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
 
     renderTableCard = (item) => {
         const status = dataChecking(item, 'item', 'data', 'status', 'dining');
-        // return (
-        //     <TouchableOpacity
-        //         onPress={() => {
-        //             this.setState({
-        //                 showMenuScreen: true,
-        //                 targetTabldIndex: item.index,
-        //             });
-        //         }}
-        //     >
-        //         <View
-        //             style={{
-        //                 borderStyle: 'dashed',
-        //                 borderWidth: 1,
-        //                 borderColor: 'gray',
-        //                 height: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
-        //                 width: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
-        //                 margin: getXdp(globalScope.marginForSmallCard),
-        //                 padding: getXdp(globalScope.paddingForSmallCard),
-        //             }}
-        //         >
-        //             <View
-        //                 style={{
-        //                     position: 'absolute',
-        //                     right: 0,
-        //                     top: 0,
-        //                 }}
-        //             >
-        //                 <Text
-        //                     className="table-code"
-        //                     style={{
-        //                         color: 'white',
-        //                         textAlign: 'center',
-        //                         fontSize: getXdp(3),
-        //                         fontWeight: 'bold',
-        //                         padding: getXdp(1.8),
-        //                         backgroundColor: dataChecking(item, 'item', 'data', 'status', 'dining') ? 'red' : 'gray',
-        //                     }}
-        //                 >
-        //                     {dataChecking(item, 'item', 'key')}
-        //                 </Text>
-        //                 <Text
-        //                     style={{ fontSize: getXdp(1) }}
-        //                 >
-        //                     Order Created
-        //                 </Text>
-        //             </View>
-        //             <Text
-        //                 className="empty-text-display"
-        //                 style={{
-        //                     color: 'gray',
-        //                     fontSize: getXdp(2.5),
-        //                     fontWeight: 'bold',
-        //                     top: getXdp(7),
-        //                     textAlign: 'center',
-        //                 }}
-        //             >
-        //                 EMPTY
-        //             </Text>
-        //         </View>
-        //     </TouchableOpacity>
-        // );
 
         return (
             <TouchableOpacity
@@ -170,8 +104,8 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                         borderStyle: 'dashed',
                         borderWidth: 1,
                         borderColor: 'gray',
-                        height: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
-                        width: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / globalScope.numColumnForSmallCard),
+                        height: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / numColSmallCard),
+                        width: getXdp((100 - 2 - (4 * globalScope.marginForSmallCard) - (2 * globalScope.paddingForSmallCard)) / numColSmallCard),
                         margin: getXdp(globalScope.marginForSmallCard),
                         padding: getXdp(globalScope.paddingForSmallCard),
                         backgroundColor: status ? 'white' : '',
@@ -263,13 +197,9 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         return (
             <View style={{ padding: getXdp(globalScope.marginForSmallCard), backgroundColor: '#EEE', height: getYdp(90) }}>
                 <FlatList
-                    numColumns={globalScope.numColumnForSmallCard}
+                    numColumns={numColSmallCard}
                     data={this.state.tables}
-                    // nextPage={this.props.nextOrderPage}
                     renderItem={this.renderTableCard}
-                    // onEndReached={() => { alert('on end reach'); }}
-                    // onEndReachedThreshold={0.3}
-                    // onViewableItemsChanged={this.props.onViewChanged}
                     keyExtractor={(item, index) => `${index}`}
                 />
                 <ModalWrapper
