@@ -4,4 +4,6 @@
  *
  */
 
-export const DEFAULT_ACTION = 'app/CartScreen/DEFAULT_ACTION';
+export const GET_CART_DATA = 'app/CartScreen/GET_CART_DATA';
+export const GET_CART_DATA_SUCCESS = 'app/CartScreen/GET_CART_DATA_SUCCESS';
+export const GET_CART_DATA_FAILED = 'app/CartScreen/GET_CART_DATA_FAILED';

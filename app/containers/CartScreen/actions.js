@@ -5,11 +5,28 @@
  */
 
 import {
-    DEFAULT_ACTION,
+    GET_CART_DATA,
+    GET_CART_DATA_SUCCESS,
+    GET_CART_DATA_FAILED,
 } from './constants';
 
-export function defaultAction() {
+export function getCartData(requestBody) {
     return {
-        type: DEFAULT_ACTION,
+        type: GET_CART_DATA,
+        requestBody,
+    };
+}
+
+export function getCartDataSuccess(payload) {
+    return {
+        type: GET_CART_DATA_SUCCESS,
+        payload,
+    };
+}
+
+export function getCartDataFailed(payload) {
+    return {
+        type: GET_CART_DATA_FAILED,
+        payload,
     };
 }

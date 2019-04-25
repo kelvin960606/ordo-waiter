@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, AsyncStorage, ScrollView } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -23,6 +23,10 @@ import { getProductData } from './actions';
 import saga from './saga';
 import productData from './productData';
 
+const numColSmallCard = globalScope.numColumnForSmallCard;
+// const marginSmallCard = globalScope.marginForSmallCard;
+// const paddingSmallCard = globalScope.paddingForSmallCard;
+
 export class MenuScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {};
 
@@ -37,49 +41,27 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.orderedProducts !== this.state.orderedProducts) {
+        if (nextProps.currentTableData !== this.props.currentTableData) {
             this.setState({
-                currentCart: nextProps.orderedProducts || {},
+                currentCart: nextProps.currentTableData || {},
             });
         }
 
-        if (nextProps.getProductLoading !== this.props.getProductLoading) {
+        if (nextProps.menuscreen.getProductLoading !== this.props.menuscreen.getProductLoading) {
             this.setState({
-                getProductLoading: nextProps.getProductLoading,
+                getProductLoading: nextProps.menuscreen.getProductLoading,
             });
         }
-    }
 
-    onManageTopping = (toppingId) => {
-        const { onDisplayProduct, onEditToppingProductIndex } = this.state;
-        const newCart = { ...this.state.currentCart };
-        const productItem = newCart[onDisplayProduct.id].items[onEditToppingProductIndex];
-        productItem.topping = productItem.topping || [];
-
-        const idInNumber = Number(toppingId);
-
-        if (productItem.topping.includes(idInNumber)) {
-            productItem.topping.splice(productItem.topping.indexOf(idInNumber), 1);
-        } else {
-            productItem.topping.push(idInNumber);
+        if (nextProps.menuscreen.getProductSuccess === false) {
+            alert(nextProps.menuscreen.getProductReturnMessage);
         }
-
-        this.setState({
-            currentCart: newCart,
-        });
     }
 
     onToggleProductDetail = (product) => {
         this.setState({
             showProductDetail: !this.state.showProductDetail,
             onDisplayProduct: product,
-        });
-    }
-
-    onToggleTopping = (dataObj) => {
-        this.setState({
-            showManageTopping: !this.state.showManageTopping,
-            onEditToppingProductIndex: dataObj && dataObj.index,
         });
     }
 
@@ -97,21 +79,21 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
         return `http://placekitten.com/${num}/${num}`;
     }
 
-    renderMenuItem = (dataObj) => (
+    renderMenuItem = ({ item }) => (
         <TouchableOpacity
-            onPress={() => this.onToggleProductDetail(dataObj.item)}
+            onPress={() => this.onToggleProductDetail(item)}
             style={{
                 borderStyle: 'solid',
                 borderWidth: 3,
-                borderColor: this.state.currentCart[dataObj.item.id] ? '#E89558' : 'transparent',
-                width: getXdp(92 / globalScope.numColumnForSmallCard),
+                borderColor: this.state.currentCart[item.id] ? '#E89558' : 'transparent',
+                width: getXdp(90 / numColSmallCard),
                 margin: getXdp(1),
                 position: 'relative',
             }}
         >
             <View style={{ borderColor: 'lightgray', borderWidth: 1 }}>
                 {
-                    dataChecking(this.state.currentCart, dataObj.item.id, 'items', 'length') &&
+                    dataChecking(this.state.currentCart, item.id, 'items', 'length') &&
                         <View
                             className="counter-balloon"
                             style={{
@@ -128,12 +110,12 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }}
                         >
                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: getXdp(2.5) }}>
-                                {this.state.currentCart[dataObj.item.id].count}
+                                {this.state.currentCart[item.id].count}
                             </Text>
                         </View>
                 }
                 <View>
-                    <Image style={{ height: getXdp((92 - 2) / globalScope.numColumnForSmallCard), width: getXdp((92 - 2) / globalScope.numColumnForSmallCard) }} source={{ uri: this.randomKitten() }} />
+                    <Image style={{ height: getXdp((90 - 2) / numColSmallCard), width: getXdp((90 - 2) / numColSmallCard) }} source={{ uri: this.randomKitten() }} />
                 </View>
                 <View
                     style={{
@@ -141,89 +123,87 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                         padding: getXdp(2),
                     }}
                 >
-                    <Text style={{ fontSize: getXdp(2.3), fontWeight: 'bold', marginBottom: 5 }}>{dataObj.item.product_code}</Text>
-                    <Text style={{ fontSize: getXdp(2), marginBottom: 10 }}>{dataObj.item.product_name}</Text>
-                    <PriceTag value={dataObj.item.product_price} />
+                    <Text style={{ fontSize: getXdp(2.3), fontWeight: 'bold', marginBottom: 5 }}>{item.product_code}</Text>
+                    <Text style={{ fontSize: getXdp(2), marginBottom: 10 }}>{item.product_name}</Text>
+                    <PriceTag value={item.product_price} />
                 </View>
             </View>
         </TouchableOpacity>
     );
 
-    renderProductItem = (dataObj) => (
-        <View
-            className="product-detail-item"
-            style={{
-                width: getXdp(80),
-                paddingVertical: getXdp(3.5),
-                borderColor: 'salmon',
-                borderWidth: 1,
-                paddingLeft: 50,
-                paddingRight: 20,
-                marginBottom: 10,
-            }}
-        >
-            <Text style={{ position: 'absolute', left: getXdp(2), top: getXdp(2.4), fontSize: getXdp(4) }}>{dataObj.index + 1}</Text>
-            <View>
-                {
-                    dataObj.item.topping && dataObj.item.topping.map((toppingId, index2) => (
-                        <Text key={index2}>{`- ${dataChecking(this.state.onDisplayProduct, 'toppings', toppingId, 'toppingText')}`}</Text>
-                    ))
-                }
-                {
-                    !dataChecking(dataObj, 'item', 'topping', 'length') &&
-                        <Text style={{ color: 'lightgray', fontSize: getXdp(2), paddingLeft: getXdp(2) }}>No topping yet</Text>
-                }
-            </View>
-            <TouchableOpacity
-                onPress={() => {
-                    this.onToggleTopping(dataObj);
-                }}
+    renderProductItem = ({ index }) => {
+        const { onDisplayProduct } = this.state;
+
+        return (
+            <View
+                className="product-detail-item"
                 style={{
-                    backgroundColor: 'tomato',
-                    paddingVertical: 10,
-                    paddingHorizontal: 5,
-                    position: 'absolute',
-                    right: getXdp(1),
-                    top: getXdp(1),
-                    width: getXdp(10),
-                    borderRadius: 15,
+                    width: getXdp(80),
+                    paddingVertical: getXdp(3.5),
+                    borderColor: 'salmon',
+                    borderWidth: 1,
+                    paddingLeft: 50,
+                    paddingRight: 20,
+                    marginBottom: 10,
+                    flexDirection: 'row',
                 }}
             >
-                <Text
-                    style={{
-                        textAlign: 'center',
-                        fontSize: getXdp(2),
-                    }}
-                >
-                    Add Topping
-                </Text>
-            </TouchableOpacity>
-        </View>
-    );
+                <Text style={{ alignSelf: 'center', fontSize: getXdp(4) }}>{index + 1}</Text>
+                <ScrollView style={{ paddingHorizontal: getXdp(5) }} horizontal={true}>
+                    {
+                        dataChecking(onDisplayProduct, 'toppings', 'length') ?
+                            onDisplayProduct.toppings.map((item2, index2) => (
+                                <View key={`${index2}`}>{this.renderToppingItem({ item: item2, index: index2 }, index)}</View>
+                            ))
+                            :
+                            <Text style={{ color: 'lightgray', fontSize: getXdp(2), paddingLeft: getXdp(2) }}>No topping available</Text>
+                    }
+                </ScrollView>
+            </View>
+        );
+    };
 
-    renderToppingItem = (dataObj) => {
+    renderToppingItem = ({ item }, productItemIndex) => {
         const { currentCart, onDisplayProduct, onEditToppingProductIndex } = this.state;
-        const topping = currentCart[onDisplayProduct.id].items[onEditToppingProductIndex].topping || [];
+        const targetProductItemIndex = productItemIndex !== undefined ? productItemIndex : onEditToppingProductIndex;
+        const productItem = currentCart[onDisplayProduct.id].items[targetProductItemIndex] || {};
+        const toppings = productItem.toppings || [];
 
         return (
             <TouchableOpacity
                 onPress={() => {
-                    this.onManageTopping(dataObj.item);
+                    productItem.toppings = productItem.toppings || [];
+
+                    if (productItem.toppings.includes(item.id)) {
+                        productItem.toppings.splice(productItem.toppings.indexOf(item.id), 1);
+                    } else {
+                        productItem.toppings.push(item.id);
+                    }
+
+                    const newCart = { ...this.state.currentCart };
+                    newCart[onDisplayProduct.id].items[onEditToppingProductIndex] = productItem;
+
+                    this.setState({
+                        currentCart: newCart,
+                    });
                 }}
                 style={{
+                    borderRadius: 15,
                     borderStyle: 'solid',
                     borderWidth: 3,
-                    borderColor: topping.includes(Number(dataObj.item)) ? '#E89558' : 'lightgray',
-                    width: getXdp(60 / globalScope.numColumnForSmallCard),
-                    margin: getXdp(1),
-                    position: 'relative',
-                    paddingVertical: 10,
-                    paddingHorizontal: 5,
+                    borderColor: toppings.includes(item.id) ? 'tomato' : '#DDD',
+                    paddingVertical: getXdp(1),
+                    paddingHorizontal: getXdp(3),
+                    marginHorizontal: getXdp(1),
                 }}
             >
-                <Text style={{ textAlign: 'center' }}>
-                    {dataChecking(onDisplayProduct, 'toppings', dataObj.item, 'toppingText')}
+                <Text style={{ paddingRight: 20, fontSize: getXdp(1.8), color: true ? 'black' : 'gray' }}>
+                    {dataChecking(item, 'topping_name')}
                 </Text>
+                {
+                    dataChecking(item, 'topping_price') &&
+                        <Text style={{ color: toppings.includes(item.id) ? 'tomato' : 'lightgray' }}><PriceTag value={item.topping_price} /></Text>
+                }
             </TouchableOpacity>
         );
     };
@@ -328,11 +308,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                             <FlatList
                                                 numColumns={1}
                                                 data={dataChecking(this.state.currentCart, onDisplayProduct.id, 'items') || []}
-                                                // nextPage={this.props.nextOrderPage}
                                                 renderItem={this.renderProductItem}
-                                                // onEndReached={() => { alert('on end reach'); }}
-                                                // onEndReachedThreshold={0.3}
-                                                // onViewableItemsChanged={this.props.onViewChanged}
                                                 keyExtractor={(item, index) => `${index}`}
                                                 ListFooterComponent={() => (
                                                     <TouchableOpacity
@@ -362,108 +338,10 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                     </View>
                             }
                             {
-                                this.state.showManageTopping &&
-                                    <View
-                                        className="manage-topping-modal-overlay"
-                                        style={{
-                                            backgroundColor: '#000',
-                                            position: 'absolute',
-                                            top: 0,
-                                            bottom: 0,
-                                            left: 0,
-                                            right: 0,
-                                            zIndex: 4,
-                                            opacity: 0.5,
-                                        }}
-                                    >
-                                    </View>
-                            }
-                            {
-                                this.state.showManageTopping &&
-                                    <View
-                                        className="manage-topping-dialog"
-                                        style={{
-                                            backgroundColor: 'white',
-                                            position: 'absolute',
-                                            top: getXdp(25),
-                                            bottom: getXdp(35),
-                                            left: getXdp(15),
-                                            right: getXdp(15),
-                                            borderWidth: 3,
-                                            borderColor: '#E89558',
-                                            zIndex: 5,
-                                            padding: 25,
-                                            paddingTop: getYdp(3),
-                                        }}
-                                    >
-                                        <TouchableOpacity
-                                            className="view-cart-button"
-                                            onPress={this.onToggleTopping}
-                                            style={{
-                                                position: 'absolute',
-                                                top: getXdp(2),
-                                                right: getXdp(2),
-                                                zIndex: 1,
-                                                padding: getXdp(1),
-                                            }}
-                                        >
-                                            <Image source={require('../../assets/images/close.png')} />
-                                        </TouchableOpacity>
-                                        <TouchableOpacity
-                                            onPress={() => {
-                                                this.onToggleTopping();
-                                            }}
-                                            style={{
-                                                bottom: 10,
-                                                right: 10,
-                                                position: 'absolute',
-                                                paddingHorizontal: 10,
-                                                paddingVertical: 6,
-                                            }}
-                                        >
-                                            <Text style={{ color: 'tomato', fontWeight: 'bold' }}>Done</Text>
-                                        </TouchableOpacity>
-                                        <Text
-                                            className="manage-topping-title"
-                                            style={{
-                                                fontWeight: 'bold',
-                                                fontSize: getXdp(3),
-                                                paddingRight: 50,
-                                                marginBottom: 5,
-                                            }}
-                                        >
-                                            Topping Available
-                                        </Text>
-                                        <Text
-                                            className="manage-topping-total"
-                                            style={{
-                                                color: 'gray',
-                                                paddingRight: 50,
-                                                marginBottom: 5,
-                                                fontSize: getXdp(2),
-                                            }}
-                                        >
-                                            Total: {dataChecking(this.state.onDisplayProduct, 'toppings') ? Object.keys(this.state.onDisplayProduct.toppings).length : 0}
-                                        </Text>
-                                        <View className="manage-topping-item-group" style={{ maxHeight: getYdp(55) }}>
-                                            <FlatList
-                                                numColumns={globalScope.numColumnForSmallCard}
-                                                data={Object.keys(dataChecking(this.state.onDisplayProduct, 'toppings') || [])}
-                                                // nextPage={this.props.nextOrderPage}
-                                                renderItem={this.renderToppingItem}
-                                                // onEndReached={() => { alert('on end reach'); }}
-                                                // onEndReachedThreshold={0.3}
-                                                // onViewableItemsChanged={this.props.onViewChanged}
-                                                keyExtractor={(item, index) => `${index}`}
-                                            />
-                                        </View>
-                                    </View>
-                            }
-                            {
                                 globalScope.productData &&
                                     <FlatList
-                                        style={{ paddingTop: getXdp(2), margin: getXdp(1) }}
-                                        numColumns={globalScope.numColumnForSmallCard}
+                                        style={{ paddingTop: getXdp(2), paddingHorizontal: getXdp(1), margin: getXdp(1) }}
+                                        numColumns={numColSmallCard}
                                         data={globalScope.productData}
                                         // nextPage={this.props.nextOrderPage}
                                         renderItem={this.renderMenuItem}
@@ -471,10 +349,11 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         // onEndReachedThreshold={0.3}
                                         // onViewableItemsChanged={this.props.onViewChanged}
                                         keyExtractor={(item, index) => `${index}`}
+                                        ListFooterComponent={<View style={{ height: getYdp(5) }} />}
                                     />
                             }
                             <TouchableOpacity
-                                className="view-cart-button"
+                                className="close-menu-button"
                                 onPress={this.props.onToggleMenu}
                                 style={{
                                     position: 'absolute',
@@ -497,7 +376,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                     padding: getXdp(1),
                                 }}
                             >
-                                <Image source={require('../../assets/images/checkout.png')} />
+                                <Image style={{ width: getXdp(10), height: getXdp(10) }} source={require('../../assets/images/checkout.png')} />
                             </TouchableOpacity>
 
                             <CartScreen

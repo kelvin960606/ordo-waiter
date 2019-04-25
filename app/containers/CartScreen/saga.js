@@ -1,16 +1,22 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { apiRequest } from 'app/globalUtils';
-import { defaultAction } from './actions';
-import { DEFAULT_ACTION } from './constants';
+import {
+    GET_CART_DATA,
+} from './constants';
+import {
+    getCartDataSuccess,
+    getCartDataFailed,
+} from './actions';
 
-export function* trigger() {
-    const response = yield call(apiRequest, '', 'get');
+export function* trigger(action) {
+    const response = yield call(apiRequest, '/store/balance', 'post', { store: 1, products: action.requestBody });
     if (response && response.ok) {
-        yield put(defaultAction(response));
+        console.log(response);
+        yield put(getCartDataSuccess({ data: response.data.result, mesage: 'Get API data success' }));
     } else {
-        yield put(defaultAction(response));
+        yield put(getCartDataFailed({ data: null, message: 'Get API data failed' }));
     }
 }
 export default function* defaultSaga() {
-    yield takeLatest(DEFAULT_ACTION, trigger);
+    yield takeLatest(GET_CART_DATA, trigger);
 }

@@ -23,7 +23,7 @@ function menuScreenReducer(state = initialState, action) {
         case GET_PRODUCT_DATA_FAILED:
             return state
                 .set('getProductLoading', false)
-                .set('getProductSuccess', dataChecking(action, 'payload', 'success'))
+                .set('getProductSuccess', dataChecking(action, 'payload', 'success') || false)
                 .set('getProductReturnMessage', dataChecking(action, 'payload', 'message'));
         default:
             return state;
