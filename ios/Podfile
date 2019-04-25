@@ -7,4 +7,6 @@ target 'ordoWaiter' do
   pod 'Firebase/Core', '~> 5.15.0'
   pod 'Firebase/Auth', '~> 5.15.0'
   pod 'Firebase/Firestore', '~> 5.15.0'
+  pod 'react-native-camera', :path => '../node_modules/react-native-camera'
+
 end

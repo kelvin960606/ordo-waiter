@@ -1,16 +1,18 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { apiRequest } from '../../globalUtils';
-import { defaultAction } from './actions';
-import { DEFAULT_ACTION } from './constants';
+import { staffLoginFailed, staffLoginSuccess } from './actions';
+import { STAFF_LOGIN } from './constants';
 
-export function* trigger() {
-    const response = yield call(apiRequest, '', 'get');
+export function* trigger(action) {
+    alert(JSON.stringify(action));
+    const body = {};
+    const response = yield call(apiRequest, '/employee/login', 'post', body);
     if (response && response.ok) {
-        yield put(defaultAction(response));
+        yield put(staffLoginSuccess(response.data));
     } else {
-        yield put(defaultAction(response));
+        yield put(staffLoginFailed(response.data));
     }
 }
 export default function* defaultSaga() {
-    yield takeLatest(DEFAULT_ACTION, trigger);
+    yield takeLatest(STAFF_LOGIN, trigger);
 }
