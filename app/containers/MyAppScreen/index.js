@@ -23,7 +23,6 @@ import { getXdp, getYdp, dataChecking } from 'app/globalUtils';
 import makeSelectMyAppScreen from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import tableData from './table.js';
 
 const numColSmallCard = globalScope.numColumnForSmallCard;
 // const marginSmallCard = globalScope.marginForSmallCard;
@@ -59,7 +58,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
             >
                 <Text style={{ padding: 10 }}>Kitchen</Text>
             </TouchableOpacity>
-        )
+        ),
     });
 
     constructor(props) {
@@ -68,7 +67,9 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         this.unsubscribe = null;
         this.state = {
             tables: [],
-            targetTabldIndex: null,
+            targetTableIndex: null,
+            editPaxTableIndex: null,
+            showSelectPax: false,
         };
     }
 
@@ -97,16 +98,49 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         }
     }
 
-    renderTableCard = (item) => {
-        const status = dataChecking(item, 'item', 'data', 'status', 'dining');
+    managePaxCount = ({ add }) => {
+        const list = [...this.state.tables];
+        const data = { ...this.state.tables[this.state.editPaxTableIndex].data };
+
+        data.pax = data.pax || 0;
+        data.pax += add ? +1 : -1;
+
+        const table = { ...this.state.tables[this.state.editPaxTableIndex], data };
+        list[this.state.editPaxTableIndex] = table;
+
+        this.setState({
+            tables: list,
+        });
+    }
+
+    goMenuScreen = (index) => {
+        if (index) {
+            this.setState({
+                showMenuScreen: true,
+                showSelectPax: false,
+                editPaxTableIndex: null,
+                targetTableIndex: index,
+            });
+        }
+    }
+
+    renderTableCard = ({ item, index }) => {
+        const status = dataChecking(item, 'data', 'pax');
 
         return (
             <TouchableOpacity
                 onPress={() => {
-                    this.setState({
-                        showMenuScreen: true,
-                        targetTabldIndex: item.index,
-                    });
+                    if (!status) {
+                        this.setState({
+                            showSelectPax: true,
+                            showMenuScreen: false,
+                            editPaxTableIndex: index,
+                            targetTableIndex: null,
+                        });
+                        return;
+                    }
+
+                    this.goMenuScreen(index);
                 }}
             >
                 <View
@@ -139,7 +173,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                 backgroundColor: status ? 'tomato' : 'gray',
                             }}
                         >
-                            {dataChecking(item, 'item', 'key')}
+                            {dataChecking(item, 'key')}
                         </Text>
                         {/* <Text
                             style={{ fontSize: getXdp(1) }}
@@ -148,14 +182,16 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                         </Text> */}
                     </View>
                     {
-                        status &&
+                        status ?
                             <View className="top-left">
                                 <Image source={require('../../assets/images/people.png')} style={{ tintColor: 'gray', width: getXdp(4), height: getXdp(4) }} />
-                                <Text style={{ fontSize: getXdp(2) }}>{dataChecking(item, 'item', 'data', 'info', 'pax')}pax</Text>
+                                <Text style={{ fontSize: getXdp(2) }}>{dataChecking(item, 'data', 'pax')}pax</Text>
                             </View>
+                            :
+                            null
                     }
                     {
-                        status &&
+                        status ?
                             <View
                                 className="bottom-left"
                                 style={{
@@ -165,13 +201,16 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                 }}
                             >
                                 {
-                                    dataChecking(item, 'item', 'data', 'payment', 'total') &&
-                                        <PriceTag value={item.item.data.payment.total} />
+                                    dataChecking(item, 'data', 'payment', 'total') ?
+                                        <PriceTag value={item.data.payment.total} />
+                                        : null
                                 }
                             </View>
+                            :
+                            null
                     }
                     {
-                        status &&
+                        status ?
                             <View
                                 className="bottom-right"
                                 style={{
@@ -182,9 +221,11 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             >
                                 <Text style={{ fontSize: getXdp(1.8) }}>10 mins ago</Text>
                             </View>
+                            :
+                            null
                     }
                     {
-                        !status &&
+                        !status ?
                             <Text
                                 className="empty-text-display"
                                 style={{
@@ -197,6 +238,8 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                             >
                                 EMPTY
                             </Text>
+                            :
+                            null
                     }
                 </View>
             </TouchableOpacity>
@@ -204,32 +247,117 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
     };
 
     render() {
+        const { tables, targetTableIndex, editPaxTableIndex, showMenuScreen, showSelectPax } = this.state;
+
         return (
             <View style={{ padding: getXdp(globalScope.marginForSmallCard), backgroundColor: '#EEE', height: getYdp(90) }}>
                 <FlatList
                     numColumns={numColSmallCard}
-                    data={this.state.tables}
+                    data={tables}
                     renderItem={this.renderTableCard}
                     keyExtractor={(item, index) => `${index}`}
                 />
                 <ModalWrapper
                     position="right"
                     containerStyle={{ marginVertical: 100 }}
-                    onRequestClose={() => this.setState({ showMenuScreen: false, targetTabldIndex: null })}
+                    onRequestClose={() => this.setState({ showMenuScreen: false, targetTableIndex: null })}
                     style={{ flex: 1 }}
                     shouldAnimateOnRequestClose={true}
-                    visible={this.state.showMenuScreen || false}
+                    visible={showMenuScreen || false}
                 >
                     {
-                        (this.state.tables && this.state.targetTabldIndex !== null) ?
+                        (tables && targetTableIndex !== null) ?
                             <MenuScreen
-                                currentTableData={this.state.tables[this.state.targetTabldIndex]}
-                                onToggleMenu={() => this.setState({ showMenuScreen: false, targetTabldIndex: null })}
+                                currentTableData={tables[targetTableIndex]}
+                                onToggleMenu={() => this.setState({ showMenuScreen: false, targetTableIndex: null })}
                             />
                             :
                             <Text>Opps, something wrong...</Text>
                     }
                 </ModalWrapper>
+
+                {
+                    this.state.showSelectPax &&
+                        <TouchableOpacity
+                            className="select-pax-modal-overlay"
+                            onPress={() => this.setState({ showSelectPax: false, targetTableIndex: null })}
+                            style={{
+                                backgroundColor: '#000',
+                                position: 'absolute',
+                                top: 0,
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                zIndex: 2,
+                                opacity: 0.7,
+                            }}
+                        >
+                        </TouchableOpacity>
+                }
+                {
+                    this.state.showSelectPax &&
+                        <View
+                            className="select-pax-dialog"
+                            style={{
+                                backgroundColor: 'white',
+                                position: 'absolute',
+                                top: getYdp(30),
+                                left: getXdp(20),
+                                right: getXdp(20),
+                                borderWidth: 3,
+                                borderColor: '#E89558',
+                                zIndex: 3,
+                                padding: 25,
+                                paddingTop: getYdp(3),
+                            }}
+                        >
+                            {
+                                editPaxTableIndex !== null && editPaxTableIndex.constructor === Number && tables[editPaxTableIndex] ?
+                                    <View>
+                                        <Text style={{ alignSelf: 'center', fontSize: getXdp(3) }}>Number of PAX</Text>
+                                        <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                                            <TouchableOpacity
+                                                style={{ paddingVertical: getXdp(1.5) }}
+                                                onPress={() => this.managePaxCount({ add: false })}
+                                            >
+                                                <Image
+                                                    style={{ paddingHorizontal: getXdp(6), paddingVertical: getXdp(6), margin: getXdp(2), height: getXdp(5), width: getXdp(5) }}
+                                                    source={require('../../assets/images/subtract.png')}
+                                                />
+                                            </TouchableOpacity>
+                                            <Text
+                                                style={{ paddingHorizontal: getXdp(6), paddingVertical: getXdp(5), margin: getXdp(2), fontSize: getXdp(3), borderColor: 'tomato', borderWidth: getXdp(0.4) }}
+                                            >
+                                                {dataChecking(tables, editPaxTableIndex, 'data', 'pax') || 0}
+                                            </Text>
+                                            <TouchableOpacity
+                                                style={{ paddingVertical: getXdp(1.5) }}
+                                                onPress={() => this.managePaxCount({ add: true })}
+                                            >
+                                                <Image
+                                                    style={{ paddingHorizontal: getXdp(6), paddingVertical: getXdp(6), margin: getXdp(2), height: getXdp(5), width: getXdp(5) }}
+                                                    source={require('../../assets/images/plus.png')}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                        <TouchableOpacity
+                                            style={{
+                                                paddingVertical: getXdp(2.5),
+                                                backgroundColor: '#DDDAFF',
+                                                borderRadius: 25,
+                                                marginTop: getXdp(5),
+                                                marginHorizontal: getXdp(6),
+                                             }}
+                                            onPress={() => this.goMenuScreen(this.state.editPaxTableIndex)}
+                                        >
+                                            <Text style={{ fontSize: getXdp(2.5), alignSelf: 'center' }}>Proceed</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    :
+                                    null
+                            }
+                        </View>
+                }
             </View>
         );
     }
