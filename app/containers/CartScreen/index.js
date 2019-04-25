@@ -17,7 +17,7 @@ import { globalScope } from 'app/globalScope';
 import injectSaga from 'utils/injectSaga';
 import injectReducer from 'utils/injectReducer';
 import makeSelectCartScreen from './selectors';
-import { getCartData } from './actions';
+import { getCartData, createOrder } from './actions';
 import reducer from './reducer';
 import saga from './saga';
 
@@ -26,7 +26,10 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.visible && nextProps.visible !== this.props.visible) {
-            this.props.dispatch(getCartData(this.props.currentCartData));
+            this.props.dispatch(getCartData({
+                store: 1,
+                products: this.props.currentCartData,
+            }));
         }
 
         if (nextProps.cartscreen.checkoutInfo && nextProps.cartscreen.checkoutInfo !== this.props.cartscreen.checkoutInfo) {
@@ -174,7 +177,19 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
                                         <PriceTag value={this.state.checkoutInfo.payment.total} style={{ fontSize: getXdp(2.6), fontWeight: 'bold' }} />
                                 }
                             </View>
-                            <TouchableOpacity style={{ backgroundColor: 'tomato', paddingVertical: getXdp(2) }}>
+                            <TouchableOpacity
+                                style={{ backgroundColor: 'tomato', paddingVertical: getXdp(2) }}
+                                onPress={() => {
+                                    console.log({ props: this.props, state: this.state });
+                                    this.props.dispatch(createOrder({
+                                        store: 1,
+                                        merchant: 1,
+                                        pax: this.props.currentTableData.data.pax,
+                                        table: this.props.currentTableData.key,
+                                        products: this.props.currentCartData,
+                                    }));
+                                }}
+                            >
                                 <Text style={{ fontSize: getXdp(3), textAlign: 'center', color: 'white' }}>
                                     {`${isLoading ? 'Please wait...' : 'Create Order'}`}
                                 </Text>
