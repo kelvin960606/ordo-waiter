@@ -30,16 +30,13 @@ const productData = [
                 self: 6,
             },
         },
-        toppings: {
-            1: {
-                toppingId: 1,
-                toppingText: 'Add Noodles',
-            },
-            2: {
-                toppingId: 2,
-                toppingText: 'Add Sunny Side Egg',
-            },
-        },
+        toppings: [{
+            id: 1,
+            topping_name: 'Add Noodles',
+        }, {
+            id: 2,
+            topping_name: 'Add Sunny Side Egg',
+        }],
         link: {
             base: 'http: //ordo-koa.herokuapp.com/',
             path: 'postgres/product/',

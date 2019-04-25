@@ -62,7 +62,7 @@ const tableData = [
                     count: 2,
                     info: 'Add sugars',
                     productId: 1,
-                    topping: [{
+                    toppings: [{
                         count: 1,
                         toppingId: 1,
                     }],
@@ -82,7 +82,7 @@ const tableData = [
                 2: {
                     count: 3,
                     items: [{
-                        topping: [1, 2],
+                        toppings: [1, 2],
                     }, {
 
                     }, {}],
@@ -140,7 +140,7 @@ const tableData = [
                     count: 2,
                     info: 'Add sugars',
                     productId: 1,
-                    topping: [{
+                    toppings: [{
                         count: 1,
                         toppingId: 1,
                     }],
@@ -160,7 +160,7 @@ const tableData = [
                 2: {
                     count: 3,
                     items: [{
-                        topping: [1, 2],
+                        toppings: [1, 2],
                     }, {
 
                     }, {}],
