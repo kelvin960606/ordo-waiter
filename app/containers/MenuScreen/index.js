@@ -21,7 +21,6 @@ import makeSelectMenuScreen from './selectors';
 import reducer from './reducer';
 import { getProductData } from './actions';
 import saga from './saga';
-import productData from './productData';
 
 const numColSmallCard = globalScope.numColumnForSmallCard;
 // const marginSmallCard = globalScope.marginForSmallCard;

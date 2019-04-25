@@ -67,7 +67,6 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
         }
     }
 
-
     renderScreen = () => {
         switch (this.state.screen) {
             case 'order':
