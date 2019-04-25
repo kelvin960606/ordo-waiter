@@ -7,10 +7,12 @@ import MyAppScreen from '../containers/MyAppScreen';
 import LoginScreen from '../containers/LoginScreen';
 import MenuScreen from '../containers/MenuScreen';
 import AuthLoadingScreen from '../containers/AuthLoadingScreen';
+import KitchenScreen from '../containers/KitchenScreen';
 
 const AppStack = createStackNavigator({
     MyApp: MyAppScreen,
     Menu: MenuScreen,
+    Kitchen: KitchenScreen,
 });
 const AuthStack = createStackNavigator({ Login: LoginScreen });
 

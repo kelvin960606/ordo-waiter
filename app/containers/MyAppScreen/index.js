@@ -50,6 +50,16 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                 />
             </TouchableOpacity>
         ),
+        headerLeft: (
+            <TouchableOpacity
+                className="logout-button"
+                onPress={async () => {
+                    navigation.navigate('Kitchen');
+                }}
+            >
+                <Text style={{ padding: 10 }}>Kitchen</Text>
+            </TouchableOpacity>
+        )
     });
 
     constructor(props) {
@@ -57,7 +67,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
         this.unsubscribe = null;
         this.state = {
-            tables: {},
+            tables: [],
             targetTabldIndex: null,
         };
     }
