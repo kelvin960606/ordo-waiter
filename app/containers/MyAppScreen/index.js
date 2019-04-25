@@ -270,13 +270,19 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                         (tables && targetTableIndex !== null) ?
                             <MenuScreen
                                 currentTableData={tables[targetTableIndex]}
-                                onCloseMenu={() => {
+                                onCancelOrder={() => {
                                     const target = this.state.targetTableIndex;
                                     this.setState({
                                         showMenuScreen: false,
                                         targetTableIndex: null,
                                     });
-                                    this.managePaxCount({ value: 0, target, });
+                                    this.managePaxCount({ value: 0, target });
+                                }}
+                                onOrderCreated={() => {
+                                    this.setState({
+                                        showMenuScreen: false,
+                                        targetTableIndex: null,
+                                    });
                                 }}
                             />
                             :
