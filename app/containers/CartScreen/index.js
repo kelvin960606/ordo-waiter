@@ -36,26 +36,41 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
         }
     }
 
-    renderItemInCart = ({ item }) => (
+    renderItemInCart = ({ item, index }) => (
         <View className="cart-product-item" style={{ padding: getXdp(1.5) }}>
-            <Text style={{ fontSize: getXdp(2.5) }}>{item.code}</Text>
-            <Text style={{ fontSize: getXdp(2.5), fontWeight: 'bold' }}>{item.name}</Text>
-            {
-                item.toppings && item.toppings.length ?
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <Text style={{ alignSelf: 'center', fontSize: getXdp(3), paddingRight: getXdp(3) }}>{index + 1}</Text>
+                    </View>
                     <View>
+                        <Text style={{ fontSize: getXdp(1.8), color: 'darkgray' }}>{item.code}</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontSize: getXdp(2), paddingRight: getXdp(2) }}>{item.name}</Text>
+                            <PriceTag value={item.price.product} style={{ fontSize: getXdp(2), color: 'darkgray', alignSelf: 'flex-end' }} />
+                        </View>
                         {
-                            item.toppings.map((topping) => (
-                                <Text>
-                                    <Text>{`- ${topping.code}: ${topping.name}  `}</Text>
-                                    <PriceTag value={10} style={{ padding: getXdp(0.6), fontSize: getXdp(1.9), color: 'darkgray' }} />
-                                </Text>
-                            ))
+                            item.toppings && item.toppings.length ?
+                                <View>
+                                    {
+                                        item.toppings.map((topping, toppingIndex) => (
+                                            <View key={`${toppingIndex}`} style={{ flexDirection: 'row' }}>
+                                                <Text style={{ fontSize: getXdp(2), paddingRight: getXdp(2) }}>{`- ${topping.code}: ${topping.name}`}</Text>
+                                                <PriceTag value={topping.price} style={{ fontSize: getXdp(2), color: 'darkgray' }} />
+                                            </View>
+                                        ))
+                                    }
+                                </View>
+                                :
+                                null
                         }
                     </View>
-                    :
-                    <Text>- Default</Text>
-            }
-            <View className="section-seperator" style={{ backgroundColor: 'lightgray', height: 2 }}></View>
+                </View>
+                <View>
+                    <PriceTag value={item.price.with_toppings} style={{ padding: getXdp(1), fontSize: getXdp(2.2), textAlign: 'right', alignSelf: 'flex-end' }} />
+                </View>
+            </View>
+            <View className="section-seperator" style={{ backgroundColor: 'lightgray', height: 2, marginTop: 20 }}></View>
         </View>
     );
 
@@ -125,7 +140,7 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
                                 :
                                 <View
                                     className="cart-product-list"
-                                    style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', padding: getXdp(1.5) }}
+                                    style={{ padding: getXdp(1.5) }}
                                 >
                                     {
                                         dataChecking(this.state, 'checkoutInfo', 'orders') &&
@@ -153,10 +168,10 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
                             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', padding: getXdp(1.5) }}>
                                 <Text style={{ fontSize: getXdp(2.5) }}>Total Order</Text>
                                 {
-                                    isLoading ?
+                                    isLoading && !dataChecking(this.state, 'checkoutInfo', 'payment', 'total') ?
                                         <Text style={{ fontSize: getXdp(2.6), fontWeight: 'bold' }} >Calculating...</Text>
                                         :
-                                        <PriceTag value={39.90} style={{ fontSize: getXdp(2.6), fontWeight: 'bold' }} />
+                                        <PriceTag value={this.state.checkoutInfo.payment.total} style={{ fontSize: getXdp(2.6), fontWeight: 'bold' }} />
                                 }
                             </View>
                             <TouchableOpacity style={{ backgroundColor: 'tomato', paddingVertical: getXdp(2) }}>

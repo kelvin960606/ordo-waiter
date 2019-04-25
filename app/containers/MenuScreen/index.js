@@ -66,9 +66,14 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
     }
 
     onToggleCartMenu = () => {
+        if (!this.state.showCart && (!this.state.currentCart || !Object.keys(this.state.currentCart).length)) {
+            alert('Please choose menu first.');
+            return null;
+        }
         this.setState({
             showCart: !this.state.showCart,
         });
+        return true;
     }
 
     getProductDataFromAsyncStore = async () => AsyncStorage.getItem('productData');
@@ -263,7 +268,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                         }}
                                     >
                                         <TouchableOpacity
-                                            className="view-cart-button"
+                                            className="close-product-detail-button"
                                             onPress={() => {
                                                 this.onToggleProductDetail();
                                             }}
@@ -376,7 +381,15 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                     padding: getXdp(1),
                                 }}
                             >
-                                <Image style={{ width: getXdp(10), height: getXdp(10) }} source={require('../../assets/images/checkout.png')} />
+                                <Image
+                                    style={{ width: getXdp(10), height: getXdp(10) }}
+                                    source={
+                                        this.state.currentCart && Object.keys(this.state.currentCart).length ?
+                                            require('../../assets/images/checkout.png')
+                                            :
+                                            require('../../assets/images/checkout-disable.png')
+                                    }
+                                />
                             </TouchableOpacity>
 
                             <CartScreen

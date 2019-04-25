@@ -10,8 +10,8 @@ import {
 
 export function* trigger(action) {
     const response = yield call(apiRequest, '/store/balance', 'post', { store: 1, products: action.requestBody });
+    // console.log({ response });
     if (response && response.ok) {
-        console.log(response);
         yield put(getCartDataSuccess({ data: response.data.result, mesage: 'Get API data success' }));
     } else {
         yield put(getCartDataFailed({ data: null, message: 'Get API data failed' }));
