@@ -10,4 +10,6 @@ export const globalScope = {
     marginForSmallCard: 1,
     paddingForSmallCard: 2,
     tempToken: 'b91edc20-0026-4b8f-b2ab-02b3622dc5cd',
+    merchantId: null,
+    storeId: null,
 };

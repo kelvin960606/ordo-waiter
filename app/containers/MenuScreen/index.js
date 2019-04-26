@@ -163,6 +163,27 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             <Text style={{ color: 'lightgray', fontSize: getXdp(2), paddingLeft: getXdp(2) }}>No topping available</Text>
                     }
                 </ScrollView>
+                <TouchableOpacity
+                    className="delete-item-button"
+                    onPress={() => {
+                        const newCart = { ...this.state.currentCart };
+                        newCart[onDisplayProduct.id] = newCart[onDisplayProduct.id] || { count: 0, items: [] };
+                        newCart[onDisplayProduct.id].items.splice(index, 1);
+                        newCart[onDisplayProduct.id].count -= 1;
+                        this.setState({
+                            currentCart: newCart,
+                        });
+                    }}
+                    style={{
+                        padding: getXdp(1),
+                        alignSelf: 'center',
+                    }}
+                >
+                    <Image
+                        source={require('../../assets/images/trash.png')}
+                        style={{ width: getXdp(3.5), height: getXdp(3.5), padding: getXdp(1), marginRight: getXdp(2) }}
+                    />
+                </TouchableOpacity>
             </View>
         );
     };
@@ -358,7 +379,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                             }
                             <TouchableOpacity
                                 className="close-menu-button"
-                                onPress={this.props.onCancelOrder}
+                                onPress={this.props.onCloseMenu}
                                 style={{
                                     position: 'absolute',
                                     top: getXdp(2),
@@ -396,8 +417,7 @@ export class MenuScreen extends React.PureComponent { // eslint-disable-line rea
                                 currentCartData={this.state.currentCart}
                                 visible={this.state.showCart}
                                 toggle={this.onToggleCartMenu}
-                                onCancelOrder={this.props.onCancelOrder}
-                                onOrderCreated={this.props.onOrderCreated}
+                                onCloseMenu={this.props.onCloseMenu}
                             />
                         </View>
                 }
