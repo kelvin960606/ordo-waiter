@@ -46,7 +46,7 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
     }
 
     componentDidMount() {
-        this.ref = firebase.firestore().collection('merchants').doc('1').collection('branches').doc('1');
+        this.ref = firebase.firestore().collection('merchants').doc('1').collection('stores').doc('1');
         this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
     }
 
