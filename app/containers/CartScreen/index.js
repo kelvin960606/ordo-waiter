@@ -24,7 +24,9 @@ import saga from './saga';
 export class CartScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {};
 
+
     componentWillReceiveProps(nextProps) {
+        // to dispatch getCartData when turn visible
         if (nextProps.visible && nextProps.visible !== this.props.visible) {
             this.props.dispatch(getCartData({
                 store: 1,
@@ -32,10 +34,35 @@ export class CartScreen extends React.PureComponent { // eslint-disable-line rea
             }));
         }
 
+        // handling for get checkoutInfo
         if (nextProps.cartscreen.checkoutInfo && nextProps.cartscreen.checkoutInfo !== this.props.cartscreen.checkoutInfo) {
             this.setState({
                 checkoutInfo: dataChecking(nextProps, 'cartscreen', 'checkoutInfo'),
             });
+        }
+
+        if (nextProps.cartscreen.getCartLoading !== this.props.cartscreen.getCartLoading) {
+            this.setState({
+                getCartLoading: nextProps.cartscreen.getCartLoading,
+            });
+        }
+        if (nextProps.cartscreen.createOrderLoading !== this.props.cartscreen.createOrderLoading) {
+            this.setState({
+                createOrderLoading: nextProps.cartscreen.createOrderLoading,
+            });
+        }
+
+        if (nextProps.cartscreen.getCartMessage &&
+                nextProps.cartscreen.getCartMessage !== this.props.cartscreen.getCartMessage) {
+            alert(nextProps.cartscreen.getCartMessage);
+        }
+        if (nextProps.cartscreen.createOrderMessage &&
+                nextProps.cartscreen.createOrderMessage !== this.props.cartscreen.createOrderMessage) {
+            alert(nextProps.cartscreen.createOrderMessage);
+
+            if (nextProps.cartscreen.createOrderSuccess) {
+                this.props.onOrderCreated();
+            }
         }
     }
 

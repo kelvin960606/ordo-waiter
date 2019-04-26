@@ -32,12 +32,19 @@ function cartScreenReducer(state = initialState, action) {
         case CREATE_ORDER:
             return state
                 .set('orderInfo', null)
+                .set('createOrderSuccess', false)
                 .set('createOrderLoading', true)
                 .set('createOrderMessage', null);
         case CREATE_ORDER_SUCCESS:
+            return state
+                .set('orderInfo', action.payload.data)
+                .set('createOrderSuccess', true)
+                .set('createOrderLoading', false)
+                .set('createOrderMessage', action.payload.message);
         case CREATE_ORDER_FAILED:
             return state
                 .set('orderInfo', action.payload.data)
+                .set('createOrderSuccess', false)
                 .set('createOrderLoading', false)
                 .set('createOrderMessage', action.payload.message);
         default:

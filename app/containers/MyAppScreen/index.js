@@ -98,15 +98,16 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
         }
     }
 
-    managePaxCount = ({ add }) => {
+    managePaxCount = ({ value, target }) => {
+        if (value < 0) {
+            return;
+        }
+        const targetTableIndex = target !== null && target !== undefined ? target : this.state.editPaxTableIndex;
         const list = [...this.state.tables];
-        const data = { ...this.state.tables[this.state.editPaxTableIndex].data };
-
-        data.pax = data.pax || 0;
-        data.pax += add ? +1 : -1;
-
-        const table = { ...this.state.tables[this.state.editPaxTableIndex], data };
-        list[this.state.editPaxTableIndex] = table;
+        const data = { ...this.state.tables[targetTableIndex].data };
+        data.pax = value;
+        const table = { ...this.state.tables[targetTableIndex], data };
+        list[targetTableIndex] = table;
 
         this.setState({
             tables: list,
@@ -114,7 +115,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
     }
 
     goMenuScreen = (index) => {
-        if (index) {
+        if (index !== null && index !== undefined) {
             this.setState({
                 showMenuScreen: true,
                 showSelectPax: false,
@@ -269,7 +270,20 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                         (tables && targetTableIndex !== null) ?
                             <MenuScreen
                                 currentTableData={tables[targetTableIndex]}
-                                onToggleMenu={() => this.setState({ showMenuScreen: false, targetTableIndex: null })}
+                                onCancelOrder={() => {
+                                    const target = this.state.targetTableIndex;
+                                    this.setState({
+                                        showMenuScreen: false,
+                                        targetTableIndex: null,
+                                    });
+                                    this.managePaxCount({ value: 0, target });
+                                }}
+                                onOrderCreated={() => {
+                                    this.setState({
+                                        showMenuScreen: false,
+                                        targetTableIndex: null,
+                                    });
+                                }}
                             />
                             :
                             <Text>Opps, something wrong...</Text>
@@ -318,10 +332,17 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                         <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
                                             <TouchableOpacity
                                                 style={{ paddingVertical: getXdp(1.5) }}
-                                                onPress={() => this.managePaxCount({ add: false })}
+                                                onPress={() => this.managePaxCount({ value: this.state.tables[this.state.editPaxTableIndex].data.pax - 1 })}
                                             >
                                                 <Image
-                                                    style={{ paddingHorizontal: getXdp(6), paddingVertical: getXdp(6), margin: getXdp(2), height: getXdp(5), width: getXdp(5) }}
+                                                    style={{
+                                                        paddingHorizontal: getXdp(6),
+                                                        paddingVertical: getXdp(6),
+                                                        margin: getXdp(2),
+                                                        height: getXdp(5),
+                                                        width: getXdp(5),
+                                                        tintColor: this.state.tables[this.state.editPaxTableIndex].data.pax ? null : 'lightgray',
+                                                    }}
                                                     source={require('../../assets/images/subtract.png')}
                                                 />
                                             </TouchableOpacity>
@@ -332,7 +353,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                             </Text>
                                             <TouchableOpacity
                                                 style={{ paddingVertical: getXdp(1.5) }}
-                                                onPress={() => this.managePaxCount({ add: true })}
+                                                onPress={() => this.managePaxCount({ value: this.state.tables[this.state.editPaxTableIndex].data.pax + 1 })}
                                             >
                                                 <Image
                                                     style={{ paddingHorizontal: getXdp(6), paddingVertical: getXdp(6), margin: getXdp(2), height: getXdp(5), width: getXdp(5) }}
@@ -347,8 +368,12 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
                                                 borderRadius: 25,
                                                 marginTop: getXdp(5),
                                                 marginHorizontal: getXdp(6),
-                                             }}
-                                            onPress={() => this.goMenuScreen(this.state.editPaxTableIndex)}
+                                            }}
+                                            onPress={() => {
+                                                if (this.state.tables[this.state.editPaxTableIndex].data.pax) {
+                                                    this.goMenuScreen(this.state.editPaxTableIndex);
+                                                }
+                                            }}
                                         >
                                             <Text style={{ fontSize: getXdp(2.5), alignSelf: 'center' }}>Proceed</Text>
                                         </TouchableOpacity>
