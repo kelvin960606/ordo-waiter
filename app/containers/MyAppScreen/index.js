@@ -63,7 +63,7 @@ export class MyAppScreen extends React.PureComponent { // eslint-disable-line re
 
     constructor(props) {
         super(props);
-        this.ref = firebase.firestore().collection('merchants').doc('1').collection('stores').doc('1');
+        this.ref = firebase.firestore().collection('merchants').doc(`${globalScope.merchantId}`).collection('stores').doc(`${globalScope.storeId}`);
         this.unsubscribe = null;
         this.state = {
             tables: [],

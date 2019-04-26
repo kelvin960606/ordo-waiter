@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { getXdp } from 'app/globalUtils';
+import { getXdp, dataChecking } from 'app/globalUtils';
 import { globalScope } from 'app/globalScope';
 import { RNCamera } from 'react-native-camera';
 
@@ -19,7 +19,7 @@ import injectReducer from 'utils/injectReducer';
 import makeSelectLoginScreen from './selectors';
 import reducer from './reducer';
 import saga from './saga';
-import { staffLogin } from './actions';
+import { staffLogin, getMerchantData, init } from './actions';
 export class LoginScreen extends React.PureComponent { // eslint-disable-line react/prefer-stateless-function
     state = {
         show: false,
@@ -28,19 +28,32 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
         pin: '',
     }
 
+    componentDidMount() {
+        this.props.dispatch(init());
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.loginscreen !== this.props.loginscreen) {
             if (nextProps.loginscreen.login !== this.props.loginscreen.login) {
-                if (nextProps.loginscreen.login.success && !nextProps.loginscreen.loading) {
-                    this.setToken(nextProps.loginscreen.login.result);
+                if (dataChecking(nextProps.loginscreen, 'login', 'success') && !nextProps.loginscreen.loading) {
+                    this.setToken(nextProps.loginscreen.login.result.token);
+                    this.props.dispatch(getMerchantData(nextProps.loginscreen.login.result.id));
+                }
+            }
+            if (nextProps.loginscreen.mData !== this.props.loginscreen.mData) {
+                if (dataChecking(nextProps.loginscreen.mData, 'result')) {
+                    globalScope.config = nextProps.loginscreen.mData.result;
+                    globalScope.merchantId = nextProps.loginscreen.mData.result.merchantId;
+                    globalScope.storeId = nextProps.loginscreen.mData.result.storeId;
+                    this.props.navigation.navigate('AuthLoading');
                 }
             }
         }
     }
 
     setToken = async (token) => {
+        globalScope.token = token;
         await AsyncStorage.setItem('ordo_token', token);
-        this.props.navigation.navigate('AuthLoading');
     }
 
     barcodeReceived = (e) => {
@@ -53,29 +66,6 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
                 <Text style={{ paddingVertical: 30, fontSize: getXdp(5), fontWeight: 'bold', textAlign: 'center' }}>
                     Welcome to Ordo
                 </Text>
-                <View style={{ margin: 10 }}>
-                    <Text>Username: </Text>
-                    <TextInput style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: getXdp(2.5), borderRadius: 5 }}></TextInput>
-                </View>
-                <View style={{ margin: 10 }}>
-                    <Text>Password: </Text>
-                    <TextInput secureTextEntry={true} style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: getXdp(2.5), borderRadius: 5 }}></TextInput>
-                </View>
-                <TouchableOpacity
-                    style={{
-                        paddingVertical: 20,
-                        paddingHorizontal: 10,
-                        backgroundColor: '#E89558',
-                        margin: 20,
-                        borderRadius: 15,
-                    }}
-                    onPress={async () => {
-                        await AsyncStorage.setItem('ordo_token', globalScope.tempToken);
-                        this.props.navigation.navigate('AuthLoading');
-                    }}
-                >
-                    <Text style={{ textAlign: 'center', fontSize: getXdp(3), fontWeight: 'bold', color: 'white' }}>Login</Text>
-                </TouchableOpacity>
                 <TouchableOpacity
                     style={{
                         paddingVertical: 20,
@@ -110,7 +100,12 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
                 }
                 {
                     this.state.form &&
-                        <View style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
+                        <View style={{backgroundColor: 'grey', flex: 1, position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }}>
+                            <View style={{ backgroundColor: 'red' }}>
+                                <TouchableOpacity onPress={() => this.setState({ form: false })} style={{ alignSelf: 'flex-end' }}>
+                                    <Text style={{ color: 'white', fontSize: 30 }}>X</Text>
+                                </TouchableOpacity>
+                            </View>
                             <View style={{ margin: 10 }}>
                                 <Text>Pin </Text>
                                 <TextInput onChangeText={(value) => this.setState({ pin: value })} style={{ backgroundColor: '#FFCC99', padding: 5, fontSize: getXdp(2.5), borderRadius: 5 }} />
@@ -133,10 +128,11 @@ export class LoginScreen extends React.PureComponent { // eslint-disable-line re
 
                 }
                 {
-                    this.props.loginscreen.login &&
-                    <View style={{ backgroundColor: 'gray', flex: 1, position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, justifyContent: 'center' }}>
-                        <ActivityIndicator size="large" color="white" />
-                    </View>
+                    this.props.loginscreen.loading ?
+                        <View style={{ backgroundColor: 'gray', flex: 1, position: 'absolute', top: 0, right: 0, bottom: 0, left: 0, justifyContent: 'center' }}>
+                            <ActivityIndicator size="large" color="white" />
+                        </View>
+                        : null
                 }
             </View>
         );

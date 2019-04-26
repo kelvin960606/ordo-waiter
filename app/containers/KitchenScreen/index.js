@@ -46,7 +46,7 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
     }
 
     componentDidMount() {
-        this.ref = firebase.firestore().collection('merchants').doc('1').collection('stores').doc('1');
+        this.ref = firebase.firestore().collection('merchants').doc(`${globalScope.merchantId}`).collection('stores').doc(`${globalScope.storeId}`);
         this.unsubscribe = this.ref.onSnapshot(this.subscribeTables);
     }
 
@@ -83,7 +83,7 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
         return (
             <View>
                 <FlatList
-                    numColumns={5}
+                    numColumns={3}
                     data={this.state.tables}
                     // nextPage={this.props.nextOrderPage}
                     renderItem={(i) => {
@@ -92,7 +92,7 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
                         const orders = dataChecking(data, 'orders');
                         if (status) {
                             return (
-                                <View style={{ width: getXdp(90) / 5, margin: 10 }}>
+                                <View style={{ width: getXdp(90) / 3, margin: 10 }}>
                                     <View style={{ backgroundColor: 'skyblue', paddingVertical: 10 }}>
                                         <Text>{`Table No: ${i.item.key}`}</Text>
                                     </View>
@@ -101,11 +101,11 @@ export class KitchenScreen extends React.PureComponent { // eslint-disable-line 
                                             orders && orders.map((order) => {
                                                 return (
                                                     <View style={{ paddingLeft: 5 }}>
-                                                        <Text>{order.count} - <Text>{order.product_name}</Text></Text>
-                                                        <View style={{ paddingLeft: 10 }}>
+                                                        <Text>1 - <Text>{order.name}</Text></Text>
+                                                        <View style={{ paddingLeft: 20 }}>
                                                             {
                                                                 order.toppings && order.toppings.map((top) => (
-                                                                    <Text>{top.topping_name}</Text>
+                                                                    <Text>{top.name}</Text>
                                                                 ))
                                                             }
                                                         </View>
