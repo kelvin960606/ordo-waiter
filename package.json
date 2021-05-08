@@ -52,7 +52,7 @@
         "hoist-non-react-statics": "^2.3.1",
         "invariant": "^2.2.2",
         "jest": "^24.5.0",
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.21",
         "metro-react-native-babel-preset": "^0.53.1",
         "react-test-renderer": "16.8.3",
         "redux-devtools-extension": "^2.13.5",
